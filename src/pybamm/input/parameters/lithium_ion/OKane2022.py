@@ -119,8 +119,8 @@ def graphite_LGM50_diffusivity_Chen2020(sto, T):
        Solid diffusivity
     """
 
-    D_ref = 3.3e-14
-    E_D_s = 3.03e4
+    D_ref = pybamm.Parameter("Negative particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Negative particle diffusivity activation energy [J.mol-1]")
     # E_D_s not given by Chen et al (2020), so taken from Ecker et al. (2015) instead
     arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
@@ -158,8 +158,8 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
         Exchange-current density [A.m-2]
     """
 
-    m_ref = 6.48e-7  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
-    E_r = 35000
+    m_ref = pybamm.Parameter("Negative electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Negative electrode exchange-current density activation energy [J.mol-1]")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
@@ -271,7 +271,9 @@ def nmc_LGM50_diffusivity_Chen2020(sto, T):
     """
 
     D_ref = 4e-15
+    D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
     E_D_s = 25000  # O'Kane et al. (2022), after Cabanero et al. (2018)
+    E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return D_ref * arrhenius
@@ -337,8 +339,8 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     :class:`pybamm.Symbol`
         Exchange-current density [A.m-2]
     """
-    m_ref = 3.42e-6  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
-    E_r = 17800
+    m_ref = pybamm.Parameter("Positive electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Positive electrode exchange-current density activation energy [J.mol-1]")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
@@ -508,6 +510,15 @@ def get_parameter_values():
     """
 
     return {
+        #adapted from O'Kane et al. (2022)
+        "Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Positive particle diffusivity constant [m2.s-1]": 4e-15,
+        "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
+        "Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
+        "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
         "chemistry": "lithium_ion",
         # lithium plating
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
