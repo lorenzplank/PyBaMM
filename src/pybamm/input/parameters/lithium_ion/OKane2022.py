@@ -602,7 +602,7 @@ def get_parameter_values():
         "Negative electrode Paris' law constant b": 1.12,
         "Negative electrode Paris' law constant m": 2.2,
         "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
-        "Negativ electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
         "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Negative electrode LAM constant exponential term": 2.0,
         "Negative electrode critical stress [Pa]": 60000000.0,
