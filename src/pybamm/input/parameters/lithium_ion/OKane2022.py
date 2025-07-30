@@ -239,7 +239,7 @@ def graphite_cracking_rate_Ai2020(T_dim):
         cracking rate, [m/(Pa.m0.5)^m_cr]
         where m_cr is another Paris' law constant
     """
-    k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
     Eac_cr = 0  # to be implemented
     arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
     return k_cr * arrhenius
@@ -270,9 +270,7 @@ def nmc_LGM50_diffusivity_Chen2020(sto, T):
         Solid diffusivity
     """
 
-    D_ref = 4e-15
     D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
-    E_D_s = 25000  # O'Kane et al. (2022), after Cabanero et al. (2018)
     E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
@@ -402,6 +400,7 @@ def cracking_rate_Ai2020(T_dim):
         where m_cr is another Paris' law constant
     """
     k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
     Eac_cr = 0  # to be implemented
     arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
     return k_cr * arrhenius
@@ -603,6 +602,7 @@ def get_parameter_values():
         "Negative electrode Paris' law constant b": 1.12,
         "Negative electrode Paris' law constant m": 2.2,
         "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
+        "Negativ electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
         "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Negative electrode LAM constant exponential term": 2.0,
         "Negative electrode critical stress [Pa]": 60000000.0,
@@ -636,6 +636,7 @@ def get_parameter_values():
         "Positive electrode Paris' law constant b": 1.12,
         "Positive electrode Paris' law constant m": 2.2,
         "Positive electrode cracking rate": cracking_rate_Ai2020,
+        "Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
         "Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Positive electrode LAM constant exponential term": 2.0,
         "Positive electrode critical stress [Pa]": 375000000.0,
