@@ -438,7 +438,7 @@ def electrolyte_diffusivity_Nyman2008_arrhenius(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
     # So use temperature dependence from Ecker et al. (2015) instead
 
-    E_D_c_e = 17000
+    E_D_c_e = pybamm.Parameter("Electrolyte diffusivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_D_c_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return D_c_e * arrhenius
@@ -478,7 +478,7 @@ def electrolyte_conductivity_Nyman2008_arrhenius(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
     # So use temperature dependence from Ecker et al. (2015) instead
 
-    E_sigma_e = 17000
+    E_sigma_e = pybamm.Parameter("Electrolyte conductivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_sigma_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return sigma_e * arrhenius
@@ -651,6 +651,8 @@ def get_parameter_values():
         "Cation transference number": 0.2594,
         "Thermodynamic factor": 1.0,
         "Electrolyte diffusivity [m2.s-1]": electrolyte_diffusivity_Nyman2008_arrhenius,
+        "Electrolyte diffusivity activation energy [J.mol-1]": 17000,
+        "Electrolyte conductivity activation energy [J.mol-1]": 17000,
         "Electrolyte conductivity [S.m-1]"
         "": electrolyte_conductivity_Nyman2008_arrhenius,
         # experiment
