@@ -63,14 +63,9 @@ class BaseKinetics(BaseInterface):
                 "Lithium metal interface surface potential difference [V]"
             ]
         else:
-            if self.options["surface form"] == "composite_differential":
-                delta_phi = variables[
-                    f"X-averaged {domain} electrode surface potential difference [V]"
-                ]
-            else:
-                delta_phi = variables[
-                    f"{Domain} electrode surface potential difference [V]"
-                ]
+            delta_phi = variables[
+                f"{Domain} electrode surface potential difference [V]"
+            ]
             # If delta_phi was broadcast, take only the orphan.
             if isinstance(delta_phi, pybamm.Broadcast):
                 delta_phi = delta_phi.orphans[0]
