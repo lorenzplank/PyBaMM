@@ -65,7 +65,7 @@ class BaseKinetics(BaseInterface):
         else:
             if self.options["surface form"] == "composite_differential":
                 delta_phi = variables[
-                    f"X-averaged {Domain} electrode surface potential difference [V]"
+                    f"X-averaged {domain} electrode surface potential difference [V]"
                 ]
             else:
                 delta_phi = variables[
