@@ -1,8 +1,6 @@
 [build-system]
-requires = [
-    "hatchling>=1.13.0",
-    "hatch-vcs>=0.3.0",
-]
+requires = ["setuptools>=42", "setuptools_scm>=6.0", "wheel"]
+build-backend = "setuptools.build_meta"
 build-backend = "hatchling.build"
 
 [project]
@@ -263,6 +261,10 @@ concurrency = ["multiprocessing"]
 # Parse warnings have existed for a while, but became failures in pytest 8.4.0
 disable_warnings = ["couldnt-parse", "module-not-measured"]
 
+[tool.setuptools_scm]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+write_to = "your_package/_version.py"
 
 [tool.mypy]
 ignore_missing_imports = true
