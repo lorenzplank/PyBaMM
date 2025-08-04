@@ -384,7 +384,7 @@ class BatteryModelOptions(pybamm.FuzzyDict):
             "SEI on cracks": ["false", "true"],
             "SEI porosity change": ["false", "true"],
             "stress-induced diffusion": ["false", "true"],
-            "surface form": ["false", "differential", "algebraic"],
+            "surface form": ["false", "differential","composite_differential","algebraic"],
             "surface temperature": ["ambient", "lumped"],
             "thermal": ["isothermal", "lumped", "x-lumped", "x-full"],
             "total interfacial current density as a state": ["false", "true"],
