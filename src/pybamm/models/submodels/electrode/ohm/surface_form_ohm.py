@@ -6,6 +6,7 @@ import pybamm
 from .base_ohm import BaseModel
 
 
+
 class SurfaceForm(BaseModel):
     """A submodel for the electrode with Ohm's law in the surface potential
     formulation.
@@ -22,6 +23,25 @@ class SurfaceForm(BaseModel):
 
     def __init__(self, param, domain, options=None):
         super().__init__(param, domain, options=options)
+
+    def get_fundamental_variables(self):
+        domain, Domain = self.domain_Domain
+        # potential is scaled with reference potential
+        if domain == "negative":
+            reference = 0
+        else:
+            reference = self.param.ocv_init
+
+        phi_s = pybamm.Variable(
+            f"{Domain} electrode potential [V]",
+            domain=f"{domain} electrode",
+            auxiliary_domains={"secondary": "current collector"},
+            reference=reference,
+        )
+        phi_s.print_name = f"phi_s_{domain[0]}"
+        variables = self._get_standard_potential_variables(phi_s)
+
+        return variables
 
     def get_coupled_variables(self, variables):
         Domain = self.domain.capitalize()

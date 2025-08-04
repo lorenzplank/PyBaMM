@@ -49,7 +49,12 @@ class BaseElectrode(pybamm.BaseSubModel):
 
         elif self.domain == "positive":
             delta_phi_s = pybamm.boundary_value(phi_s, "right") - phi_s
-        delta_phi_s_av = pybamm.x_average(delta_phi_s)
+            
+        if self.options["surface form"] == "true":
+            delta_phi_s_av = (delta_phi_s)
+        else:
+            delta_phi_s_av = pybamm.x_average(delta_phi_s)
+
 
         variables = {
             f"{Domain} electrode potential [V]": phi_s,

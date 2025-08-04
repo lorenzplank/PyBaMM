@@ -15,7 +15,6 @@ from pybamm.expression_tree.operations.serialise import Serialise
 # Only throw the default solver warning once
 warnings.filterwarnings("once", message="The default solver changed to IDAKLUSolver*")
 
-
 class BaseModel:
     """
     Base model class for other models to extend.

@@ -93,7 +93,7 @@ class DFN(BaseModel):
             if self.options.electrode_types[domain] == "planar":
                 continue
             if self.options["surface form"] == "false":
-                submodel = pybamm.electrode.ohm.Full
+                submodel = pybamm.electrode.ohm.Full 
             else:
                 submodel = pybamm.electrode.ohm.SurfaceForm
             self.submodels[f"{domain} electrode potential"] = submodel(
