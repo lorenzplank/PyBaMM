@@ -163,6 +163,8 @@ class SPM(BaseModel):
             surf_model = surf_form.Explicit
         elif self.options["surface form"] == "differential":
             surf_model = surf_form.LeadingOrderDifferential
+        elif self.options["surface form"] == "composite_differential":
+            surf_model = surf_form.CompositeDifferential
         elif self.options["surface form"] == "algebraic":
             surf_model = surf_form.LeadingOrderAlgebraic
 
