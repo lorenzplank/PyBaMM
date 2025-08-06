@@ -873,22 +873,6 @@ def get_parameter_values():
         "Secondary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Secondary: Negative electrode LAM constant exponential term": 2.0,
         "Secondary: Negative electrode critical stress [Pa]": 60000000.0,
-        "Negative electrode Poisson's ratio": 0.3,
-        "Negative electrode Young's modulus [Pa]": 15000000000.0,
-        "Negative electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
-        "Negative electrode volume change": graphite_volume_change_Ai2020,
-        "Negative electrode initial crack length [m]": 2e-08,
-        "Negative electrode initial crack width [m]": 1.5e-08,
-        "Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Negative electrode Paris' law constant b": 1.12,
-        "Negative electrode Paris' law constant m": 2.2,
-        "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
-        "Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Negative electrode LAM constant exponential term": 2.0,
-        "Negative electrode critical stress [Pa]": 60000000.0,
         "Positive electrode Poisson's ratio": 0.2,
         "Positive electrode Young's modulus [Pa]": 375000000000.0,
         "Positive electrode reference concentration for free of deformation [mol.m-3]"
@@ -905,7 +889,6 @@ def get_parameter_values():
         "Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Positive electrode LAM constant exponential term": 2.0,
         "Positive electrode critical stress [Pa]": 375000000.0,
-        
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 0.18,
         "Maximum concentration in positive electrode [mol.m-3]": 63104.0,
