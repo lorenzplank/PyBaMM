@@ -618,7 +618,7 @@ def silicon_SEI_limited_dead_lithium_OKane2022(L_sei):
     """
 
     gamma_0 = pybamm.Parameter("Secondary: Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Secondary:Initial SEI thickness [m]")
+    L_sei_0 = pybamm.Parameter("Secondary: Initial SEI thickness [m]")
 
     gamma = gamma_0 * L_sei_0 / L_sei
 
@@ -708,30 +708,6 @@ def get_parameter_values():
         "Secondary: SEI kinetic rate constant [m.s-1]": 1e-12,
         "Secondary: SEI growth activation energy [J.mol-1]": 0.0,
         "Positive electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
-        # Plating parameters referred from OKane2022
-        "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
-        "Primary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
-        "Primary: Exchange-current density for plating [A.m-2]"
-        "": graphite_plating_exchange_current_density_OKane2020,
-        "Primary: Exchange-current density for stripping [A.m-2]"
-        "": graphite_stripping_exchange_current_density_OKane2020,
-        "Primary: Initial plated lithium concentration [mol.m-3]": 0.0,
-        "Primary: Typical plated lithium concentration [mol.m-3]": 1000.0,
-        "Primary: Lithium plating transfer coefficient": 0.65,
-        "Primary: Dead lithium decay constant [s-1]": 1e-06,
-        "Primary: Dead lithium decay rate [s-1]"
-        "": graphite_SEI_limited_dead_lithium_OKane2022,
-        "Secondary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
-        "Secondary: Exchange-current density for plating [A.m-2]"
-        "": silicon_plating_exchange_current_density_OKane2020,
-        "Secondary: Exchange-current density for stripping [A.m-2]"
-        "": silicon_stripping_exchange_current_density_OKane2020,
-        "Secondary: Initial plated lithium concentration [mol.m-3]": 0.0,
-        "Secondary: Typical plated lithium concentration [mol.m-3]": 1000.0,
-        "Secondary: Lithium plating transfer coefficient": 0.65,
-        "Secondary: Dead lithium decay constant [s-1]": 1e-06,
-        "Secondary: Dead lithium decay rate [s-1]"
-        "": silicon_SEI_limited_dead_lithium_OKane2022,
         # cell
         "Negative current collector thickness [m]": 1.2e-05,
         "Negative electrode thickness [m]": 8.52e-05,
