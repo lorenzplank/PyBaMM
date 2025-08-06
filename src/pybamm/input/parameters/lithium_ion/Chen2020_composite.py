@@ -447,19 +447,7 @@ def electrolyte_conductivity_Nyman2008(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
 
     return sigma_e
-
-
-# Load data in the appropriate format
-path, _ = os.path.split(os.path.abspath(__file__))
-graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
-    "graphite_ocp_Enertech_Ai2020.csv", path=path
-)
-
-
-def graphite_ocp_Enertech_Ai2020(sto):
-    name, (x, y) = graphite_ocp_Enertech_Ai2020_data
-    return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
-
+#plating
 def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
     """
     Exchange-current density for Li plating reaction [A.m-2].
@@ -483,7 +471,7 @@ def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
         Exchange-current density [A.m-2]
     """
 
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
+    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
 
     return pybamm.constants.F * k_plating * c_e
 
@@ -517,7 +505,7 @@ def graphite_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
         Exchange-current density [A.m-2]
     """
 
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
+    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
 
     return pybamm.constants.F * k_plating * c_Li
 
@@ -541,8 +529,8 @@ def graphite_SEI_limited_dead_lithium_OKane2022(L_sei):
         Dead lithium decay rate [s-1]
     """
 
-    gamma_0 = pybamm.Parameter("Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Initial SEI thickness [m]")
+    gamma_0 = pybamm.Parameter("Primary: Dead lithium decay constant [s-1]")
+    L_sei_0 = pybamm.Parameter("Primary: Initial SEI thickness [m]")
 
     gamma = gamma_0 * L_sei_0 / L_sei
 
@@ -571,7 +559,7 @@ def silicon_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
         Exchange-current density [A.m-2]
     """
 
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
+    k_plating = pybamm.Parameter("Secondary: Lithium plating kinetic rate constant [m.s-1]")
 
     return pybamm.constants.F * k_plating * c_e
 
@@ -605,7 +593,7 @@ def silicon_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
         Exchange-current density [A.m-2]
     """
 
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
+    k_plating = pybamm.Parameter("Secondary: Lithium plating kinetic rate constant [m.s-1]")
 
     return pybamm.constants.F * k_plating * c_Li
 
@@ -629,13 +617,25 @@ def silicon_SEI_limited_dead_lithium_OKane2022(L_sei):
         Dead lithium decay rate [s-1]
     """
 
-    gamma_0 = pybamm.Parameter("Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Initial SEI thickness [m]")
+    gamma_0 = pybamm.Parameter("Secondary: Dead lithium decay constant [s-1]")
+    L_sei_0 = pybamm.Parameter("Secondary:Initial SEI thickness [m]")
 
     gamma = gamma_0 * L_sei_0 / L_sei
 
     return gamma
 
+
+
+# Load data in the appropriate format
+path, _ = os.path.split(os.path.abspath(__file__))
+graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
+    "graphite_ocp_Enertech_Ai2020.csv", path=path
+)
+
+
+def graphite_ocp_Enertech_Ai2020(sto):
+    name, (x, y) = graphite_ocp_Enertech_Ai2020_data
+    return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
 
 
 # Call dict via a function to avoid errors when editing in place
