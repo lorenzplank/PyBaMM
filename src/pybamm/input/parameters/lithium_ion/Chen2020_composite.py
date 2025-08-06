@@ -1,6 +1,8 @@
-import pybamm
 import os
+
 import numpy as np
+
+import pybamm
 
 
 def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
@@ -126,6 +128,12 @@ def silicon_ocp_delithiation_Mark2016(sto):
         + p8
     )
     return U_delithiation
+
+
+def silicon_ocp_average_Mark2016(sto):
+    return (
+        silicon_ocp_lithiation_Mark2016(sto) + silicon_ocp_delithiation_Mark2016(sto)
+    ) / 2
 
 
 def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
@@ -299,183 +307,6 @@ def electrolyte_conductivity_Nyman2008(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
 
     return sigma_e
-#plating
-def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li plating reaction [A.m-2].
-    References
-    ----------
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-    Parameters
-    ----------
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_e
-
-
-def graphite_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li stripping reaction [A.m-2].
-
-    References
-    ----------
-
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-
-    Parameters
-    ----------
-
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-
-    Returns
-    -------
-
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_Li
-
-
-def graphite_SEI_limited_dead_lithium_OKane2022(L_sei):
-    """
-    Decay rate for dead lithium formation [s-1].
-    References
-    ----------
-    .. [1] Simon E. J. O'Kane, Weilong Ai, Ganesh Madabattula, Diega Alonso-Alvarez,
-    Robert Timms, Valentin Sulzer, Jaqueline Sophie Edge, Billy Wu, Gregory J. Offer
-    and Monica Marinescu. "Lithium-ion battery degradation: how to model it."
-    Physical Chemistry: Chemical Physics 24, no. 13 (2022): 7909-7922.
-    Parameters
-    ----------
-    L_sei : :class:`pybamm.Symbol`
-        Total SEI thickness [m]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Dead lithium decay rate [s-1]
-    """
-
-    gamma_0 = pybamm.Parameter("Primary: Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Primary: Initial SEI thickness [m]")
-
-    gamma = gamma_0 * L_sei_0 / L_sei
-
-    return gamma
-
-def silicon_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li plating reaction [A.m-2].
-    References
-    ----------
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-    Parameters
-    ----------
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Secondary: Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_e
-
-
-def silicon_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li stripping reaction [A.m-2].
-
-    References
-    ----------
-
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-
-    Parameters
-    ----------
-
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-
-    Returns
-    -------
-
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Secondary: Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_Li
-
-
-def silicon_SEI_limited_dead_lithium_OKane2022(L_sei):
-    """
-    Decay rate for dead lithium formation [s-1].
-    References
-    ----------
-    .. [1] Simon E. J. O'Kane, Weilong Ai, Ganesh Madabattula, Diega Alonso-Alvarez,
-    Robert Timms, Valentin Sulzer, Jaqueline Sophie Edge, Billy Wu, Gregory J. Offer
-    and Monica Marinescu. "Lithium-ion battery degradation: how to model it."
-    Physical Chemistry: Chemical Physics 24, no. 13 (2022): 7909-7922.
-    Parameters
-    ----------
-    L_sei : :class:`pybamm.Symbol`
-        Total SEI thickness [m]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Dead lithium decay rate [s-1]
-    """
-
-    gamma_0 = pybamm.Parameter("Secondary: Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Secondary:Initial SEI thickness [m]")
-
-    gamma = gamma_0 * L_sei_0 / L_sei
-
-    return gamma
-
 
 
 # Load data in the appropriate format
@@ -488,183 +319,6 @@ graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
 def graphite_ocp_Enertech_Ai2020(sto):
     name, (x, y) = graphite_ocp_Enertech_Ai2020_data
     return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
-
-def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li plating reaction [A.m-2].
-    References
-    ----------
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-    Parameters
-    ----------
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_e
-
-
-def graphite_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li stripping reaction [A.m-2].
-
-    References
-    ----------
-
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-
-    Parameters
-    ----------
-
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-
-    Returns
-    -------
-
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_Li
-
-
-def graphite_SEI_limited_dead_lithium_OKane2022(L_sei):
-    """
-    Decay rate for dead lithium formation [s-1].
-    References
-    ----------
-    .. [1] Simon E. J. O'Kane, Weilong Ai, Ganesh Madabattula, Diega Alonso-Alvarez,
-    Robert Timms, Valentin Sulzer, Jaqueline Sophie Edge, Billy Wu, Gregory J. Offer
-    and Monica Marinescu. "Lithium-ion battery degradation: how to model it."
-    Physical Chemistry: Chemical Physics 24, no. 13 (2022): 7909-7922.
-    Parameters
-    ----------
-    L_sei : :class:`pybamm.Symbol`
-        Total SEI thickness [m]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Dead lithium decay rate [s-1]
-    """
-
-    gamma_0 = pybamm.Parameter("Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Initial SEI thickness [m]")
-
-    gamma = gamma_0 * L_sei_0 / L_sei
-
-    return gamma
-
-def silicon_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li plating reaction [A.m-2].
-    References
-    ----------
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-    Parameters
-    ----------
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_e
-
-
-def silicon_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
-    """
-    Exchange-current density for Li stripping reaction [A.m-2].
-
-    References
-    ----------
-
-    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
-    Monica Marinescu. "Physical origin of the differential voltage minimum associated
-    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
-    167, no. 9 (2020): 090540.
-
-    Parameters
-    ----------
-
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_Li : :class:`pybamm.Symbol`
-        Plated lithium concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-
-    Returns
-    -------
-
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
-
-    return pybamm.constants.F * k_plating * c_Li
-
-
-def silicon_SEI_limited_dead_lithium_OKane2022(L_sei):
-    """
-    Decay rate for dead lithium formation [s-1].
-    References
-    ----------
-    .. [1] Simon E. J. O'Kane, Weilong Ai, Ganesh Madabattula, Diega Alonso-Alvarez,
-    Robert Timms, Valentin Sulzer, Jaqueline Sophie Edge, Billy Wu, Gregory J. Offer
-    and Monica Marinescu. "Lithium-ion battery degradation: how to model it."
-    Physical Chemistry: Chemical Physics 24, no. 13 (2022): 7909-7922.
-    Parameters
-    ----------
-    L_sei : :class:`pybamm.Symbol`
-        Total SEI thickness [m]
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Dead lithium decay rate [s-1]
-    """
-
-    gamma_0 = pybamm.Parameter("Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Initial SEI thickness [m]")
-
-    gamma = gamma_0 * L_sei_0 / L_sei
-
-    return gamma
-
 
 
 # Call dict via a function to avoid errors when editing in place
@@ -712,30 +366,6 @@ def get_parameter_values():
         "Secondary: SEI kinetic rate constant [m.s-1]": 1e-12,
         "Secondary: SEI growth activation energy [J.mol-1]": 0.0,
         "Positive electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
-        # Plating parameters referred from OKane2022
-        "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
-        "Primary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
-        "Primary: Exchange-current density for plating [A.m-2]"
-        "": graphite_plating_exchange_current_density_OKane2020,
-        "Primary: Exchange-current density for stripping [A.m-2]"
-        "": graphite_stripping_exchange_current_density_OKane2020,
-        "Primary: Initial plated lithium concentration [mol.m-3]": 0.0,
-        "Primary: Typical plated lithium concentration [mol.m-3]": 1000.0,
-        "Primary: Lithium plating transfer coefficient": 0.65,
-        "Primary: Dead lithium decay constant [s-1]": 1e-06,
-        "Primary: Dead lithium decay rate [s-1]"
-        "": graphite_SEI_limited_dead_lithium_OKane2022,
-        "Secondary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
-        "Secondary: Exchange-current density for plating [A.m-2]"
-        "": silicon_plating_exchange_current_density_OKane2020,
-        "Secondary: Exchange-current density for stripping [A.m-2]"
-        "": silicon_stripping_exchange_current_density_OKane2020,
-        "Secondary: Initial plated lithium concentration [mol.m-3]": 0.0,
-        "Secondary: Typical plated lithium concentration [mol.m-3]": 1000.0,
-        "Secondary: Lithium plating transfer coefficient": 0.65,
-        "Secondary: Dead lithium decay constant [s-1]": 1e-06,
-        "Secondary: Dead lithium decay rate [s-1]"
-        "": silicon_SEI_limited_dead_lithium_OKane2022,
         # cell
         "Negative current collector thickness [m]": 1.2e-05,
         "Negative electrode thickness [m]": 8.52e-05,
@@ -784,93 +414,13 @@ def get_parameter_values():
         "": silicon_ocp_lithiation_Mark2016,
         "Secondary: Negative electrode delithiation OCP [V]"
         "": silicon_ocp_delithiation_Mark2016,
+        "Secondary: Negative electrode OCP [V]": silicon_ocp_average_Mark2016,
         "Secondary: Negative electrode active material volume fraction": 0.015,
         "Secondary: Negative particle radius [m]": 1.52e-06,
         "Secondary: Negative electrode exchange-current density [A.m-2]"
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Secondary: Negative electrode density [kg.m-3]": 2650.0,
         "Secondary: Negative electrode OCP entropic change [V.K-1]": 0.0,
-        #cracking
-        "Primary: Negative electrode Poisson's ratio": 0.3,
-        "Primary: Negative electrode Young's modulus [Pa]": 15000000000.0,
-        "Primary: Negative electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Primary: Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
-        "Primary: Negative electrode volume change": graphite_volume_change_Ai2020,
-        "Primary: Negative electrode initial crack length [m]": 2e-08,
-        "Primary: Negative electrode initial crack width [m]": 1.5e-08,
-        "Primary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Primary: Negative electrode Paris' law constant b": 1.12,
-        "Primary: Negative electrode Paris' law constant m": 2.2,
-        "Primary: Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
-        "Primary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Primary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Primary: Negative electrode LAM constant exponential term": 2.0,
-        "Primary: Negative electrode critical stress [Pa]": 60000000.0,
-        "Secondary: Negative electrode Poisson's ratio": 0.3,
-        "Secondary: Negative electrode Young's modulus [Pa]": 15000000000.0,
-        "Secondary: Negative electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Secondary: Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
-        "Secondary: Negative electrode volume change": graphite_volume_change_Ai2020,
-        "Secondary: Negative electrode initial crack length [m]": 2e-08,
-        "Secondary: Negative electrode initial crack width [m]": 1.5e-08,
-        "Secondary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Secondary: Negative electrode Paris' law constant b": 1.12,
-        "Secondary: Negative electrode Paris' law constant m": 2.2,
-        "Secondary: Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
-        "Secondary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Secondary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Secondary: Negative electrode LAM constant exponential term": 2.0,
-        "Secondary: Negative electrode critical stress [Pa]": 60000000.0,
-        "Negative electrode Poisson's ratio": 0.3,
-        "Negative electrode Young's modulus [Pa]": 15000000000.0,
-        "Negative electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
-        "Negative electrode volume change": graphite_volume_change_Ai2020,
-        "Negative electrode initial crack length [m]": 2e-08,
-        "Negative electrode initial crack width [m]": 1.5e-08,
-        "Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Negative electrode Paris' law constant b": 1.12,
-        "Negative electrode Paris' law constant m": 2.2,
-        "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
-        "Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Negative electrode LAM constant exponential term": 2.0,
-        "Negative electrode critical stress [Pa]": 60000000.0,
-        "Primary: Positive electrode Poisson's ratio": 0.2,
-        "Primary: Positive electrode Young's modulus [Pa]": 375000000000.0,
-        "Primary: Positive electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Primary: Positive electrode partial molar volume [m3.mol-1]": 1.25e-05,
-        "Primary: Positive electrode volume change": volume_change_Ai2020,
-        "Primary: Positive electrode initial crack length [m]": 2e-08,
-        "Primary: Positive electrode initial crack width [m]": 1.5e-08,
-        "Primary: Positive electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Primary: Positive electrode Paris' law constant b": 1.12,
-        "Primary: Positive electrode Paris' law constant m": 2.2,
-        "Primary: Positive electrode cracking rate": cracking_rate_Ai2020,
-        "Primary: Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Primary: Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Primary: Positive electrode LAM constant exponential term": 2.0,
-        "Primary: Positive electrode critical stress [Pa]": 375000000.0,
-        "Secondary: Positive electrode Poisson's ratio": 0.2,
-        "Secondary: Positive electrode Young's modulus [Pa]": 375000000000.0,
-        "Secondary: Positive electrode reference concentration for free of deformation [mol.m-3]"
-        "": 0.0,
-        "Secondary: Positive electrode partial molar volume [m3.mol-1]": 1.25e-05,
-        "Secondary: Positive electrode volume change": volume_change_Ai2020,
-        "Secondary: Positive electrode initial crack length [m]": 2e-08,
-        "Secondary: Positive electrode initial crack width [m]": 1.5e-08,
-        "Secondary: Positive electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Secondary: Positive electrode Paris' law constant b": 1.12,
-        "Secondary: Positive electrode Paris' law constant m": 2.2,
-        "Secondary: Positive electrode cracking rate": cracking_rate_Ai2020,
-        "Secondary: Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Secondary: Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Secondary: Positive electrode LAM constant exponential term": 2.0,
-        "Secondary: Positive electrode critical stress [Pa]": 375000000.0,
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 0.18,
         "Maximum concentration in positive electrode [mol.m-3]": 63104.0,
