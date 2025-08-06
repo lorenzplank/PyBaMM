@@ -618,7 +618,7 @@ def silicon_SEI_limited_dead_lithium_OKane2022(L_sei):
     """
 
     gamma_0 = pybamm.Parameter("Secondary: Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Secondary:Initial SEI thickness [m]")
+    L_sei_0 = pybamm.Parameter("Secondary: Initial SEI thickness [m]")
 
     gamma = gamma_0 * L_sei_0 / L_sei
 
