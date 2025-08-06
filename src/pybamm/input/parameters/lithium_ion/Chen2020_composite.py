@@ -651,6 +651,31 @@ def get_parameter_values():
 
     return {
         "chemistry": "lithium_ion",
+        #lithium plating
+        # Plating parameters referred from OKane2022
+        "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
+        "Primary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
+        "Primary: Exchange-current density for plating [A.m-2]"
+        "": graphite_plating_exchange_current_density_OKane2020,
+        "Primary: Exchange-current density for stripping [A.m-2]"
+        "": graphite_stripping_exchange_current_density_OKane2020,
+        "Primary: Initial plated lithium concentration [mol.m-3]": 0.0,
+        "Primary: Typical plated lithium concentration [mol.m-3]": 1000.0,
+        "Primary: Lithium plating transfer coefficient": 0.65,
+        "Primary: Dead lithium decay constant [s-1]": 1e-06,
+        "Primary: Dead lithium decay rate [s-1]"
+        "": graphite_SEI_limited_dead_lithium_OKane2022,
+        "Secondary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
+        "Secondary: Exchange-current density for plating [A.m-2]"
+        "": silicon_plating_exchange_current_density_OKane2020,
+        "Secondary: Exchange-current density for stripping [A.m-2]"
+        "": silicon_stripping_exchange_current_density_OKane2020,
+        "Secondary: Initial plated lithium concentration [mol.m-3]": 0.0,
+        "Secondary: Typical plated lithium concentration [mol.m-3]": 1000.0,
+        "Secondary: Lithium plating transfer coefficient": 0.65,
+        "Secondary: Dead lithium decay constant [s-1]": 1e-06,
+        "Secondary: Dead lithium decay rate [s-1]"
+        "": silicon_SEI_limited_dead_lithium_OKane2022,
         # sei
         "Primary: Ratio of lithium moles to SEI moles": 2.0,
         "Primary: SEI partial molar volume [m3.mol-1]": 9.585e-05,
