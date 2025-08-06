@@ -4,66 +4,34 @@ import numpy as np
 
 import pybamm
 
-def graphite_cracking_rate_Ai2020(T_dim):
+def volume_change_Ai2020(sto):
     """
-    Graphite particle cracking rate as a function of temperature [1, 2].
+    Particle volume change as a function of stoichiometry [1, 2].
 
     References
     ----------
-     .. [1] Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     .. [1] > Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
      Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
      Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
       DOI: 10.1149/2.0122001JES.
-     .. [2] Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
-     Battery cycle life prediction with coupled chemical degradation and fatigue
-     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
+     .. [2] > Rieger, B., Erhard, S. V., Rumpf, K., & Jossen, A. (2016).
+     A new method to model the thickness change of a commercial pouch cell
+     during discharge. Journal of The Electrochemical Society, 163(8), A1566-A1575.
 
     Parameters
     ----------
-    T_dim: :class:`pybamm.Symbol`
-        temperature, [K]
-
+    sto: :class:`pybamm.Symbol`
+        Electrode stoichiometry, dimensionless
+        should be R-averaged particle concentration
     Returns
     -------
-    k_cr: :class:`pybamm.Symbol`
-        cracking rate, [m/(Pa.m0.5)^m_cr]
-        where m_cr is another Paris' law constant
+    t_change:class:`pybamm.Symbol`
+        volume change, dimensionless, normalised by particle volume
     """
-    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
-    Eac_cr = 0  # to be implemented
-    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
-    return k_cr * arrhenius
-
-
-def silicon_cracking_rate_Ai2020(T_dim):
-    """
-    Graphite particle cracking rate as a function of temperature [1, 2].
-
-    References
-    ----------
-     .. [1] Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
-     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
-     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
-      DOI: 10.1149/2.0122001JES.
-     .. [2] Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
-     Battery cycle life prediction with coupled chemical degradation and fatigue
-     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
-
-    Parameters
-    ----------
-    T_dim: :class:`pybamm.Symbol`
-        temperature, [K]
-
-    Returns
-    -------
-    k_cr: :class:`pybamm.Symbol`
-        cracking rate, [m/(Pa.m0.5)^m_cr]
-        where m_cr is another Paris' law constant
-    """
-    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
-    Eac_cr = 0  # to be implemented
-    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
-    return k_cr * arrhenius
+    omega = pybamm.Parameter("Positive electrode partial molar volume [m3.mol-1]")
+    c_s_max = pybamm.Parameter("Maximum concentration in positive electrode [mol.m-3]")
+    t_change = omega * c_s_max * sto
+    return t_change
 
 def graphite_volume_change_Ai2020(sto):
     """
@@ -113,9 +81,10 @@ def graphite_volume_change_Ai2020(sto):
     )
     return t_change
 
-def silicone_volume_change_Ai2020(sto):
+
+def graphite_cracking_rate_Ai2020(T_dim):
     """
-    Graphite particle volume change as a function of stoichiometry [1, 2].
+    Graphite particle cracking rate as a function of temperature [1, 2].
 
     References
     ----------
@@ -123,27 +92,58 @@ def silicone_volume_change_Ai2020(sto):
      Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
      Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
       DOI: 10.1149/2.0122001JES.
-     .. [2] Rieger, B., Erhard, S. V., Rumpf, K., & Jossen, A. (2016).
-     A new method to model the thickness change of a commercial pouch cell
-     during discharge. Journal of The Electrochemical Society, 163(8), A1566-A1575.
+     .. [2] Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
+     Battery cycle life prediction with coupled chemical degradation and fatigue
+     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
 
     Parameters
     ----------
-    sto: :class:`pybamm.Symbol`
-        Electrode stoichiometry, dimensionless
-        should be R-averaged particle concentration
+    T_dim: :class:`pybamm.Symbol`
+        temperature, [K]
+
     Returns
     -------
-    t_change:class:`pybamm.Symbol`
-        volume change, dimensionless, normalised by particle volume
+    k_cr: :class:`pybamm.Symbol`
+        cracking rate, [m/(Pa.m0.5)^m_cr]
+        where m_cr is another Paris' law constant
     """
-    p1 = 1.6
+    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
+    Eac_cr = 0  # to be implemented
+    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
+    return k_cr * arrhenius
 
-    sto = np.linspace(0, 1, 100)
-    t_change =  (
-                p1 * sto
-                )
-    return t_change
+def cracking_rate_Ai2020(T_dim):
+    """
+    Particle cracking rate as a function of temperature [1, 2].
+
+    References
+    ----------
+     .. [1] > Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
+     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
+      DOI: 10.1149/2.0122001JES.
+     .. [2] > Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
+     Battery cycle life prediction with coupled chemical degradation and fatigue
+     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
+
+    Parameters
+    ----------
+    T: :class:`pybamm.Symbol`
+        temperature, [K]
+
+    Returns
+    -------
+    k_cr: :class:`pybamm.Symbol`
+        cracking rate, [m/(Pa.m0.5)^m_cr]
+        where m_cr is another Paris' law constant
+    """
+    k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
+    Eac_cr = 0  # to be implemented
+    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
+    return k_cr * arrhenius
+
+ #changed until here
 
 def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
     c_e, c_s_surf, c_s_max, T
@@ -350,8 +350,6 @@ def nmc_LGM50_ocp_Chen2020(sto):
     return u_eq
 
 
-
-
 def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_max, T):
     """
     Exchange-current density for Butler-Volmer reactions between NMC and LiPF6 in
@@ -531,34 +529,6 @@ def get_parameter_values():
         "Current function [A]": 5.0,
         "Contact resistance [Ohm]": 0,
         # negative electrode
-        "Primary: Negative electrode initial crack length [m]": 2e-08,
-        "Primary: Negative electrode initial crack width [m]": 1.5e-08,
-        "Primary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Primary: Negative electrode conductivity [S.m-1]": 215.0,
-        "Primary: Negative electrode Paris' law constant b": 1.12,
-        "Primary: Negative electrode Paris' law constant m": 2.2,
-        "Primary: Negative electrode cracking rate" "": graphite_cracking_rate_Ai2020,
-        "Primary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Primary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Primary: Negative electrode LAM constant exponential term": 2.0,
-        "Primary: Negative electrode critical stress [Pa]": 60000000.0,
-        "Primary: Initial SEI on cracks thickness [m]": 5e-13,
-        "Primary: Negative electrode Poisson's ratio": 0.3,
-        "Primary: Negative electrode reference concentration for free of deformation [mol.m-3]": 0.0,
-        "Secondary: Negative electrode initial crack length [m]": 2e-08,
-        "Secondary: Negative electrode initial crack width [m]": 1.5e-08,
-        "Secondary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
-        "Secondary: Negative electrode conductivity [S.m-1]": 215.0,
-        "Secondary: Negative electrode Paris' law constant b": 1.12,
-        "Secondary: Negative electrode Paris' law constant m": 2.2,
-        "Secondary: Negative electrode cracking rate": silicon_cracking_rate_Ai2020,
-        "Secondary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
-        "Secondary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
-        "Secondary: Negative electrode LAM constant exponential term": 2.0,
-        "Secondary: Negative electrode critical stress [Pa]": 60000000.0,
-        "Secondary: Initial SEI on cracks thickness [m]": 5e-13,
-        "Secondary: Negative electrode Poisson's ratio": 0.3,
-        "Secondary: Negative electrode reference concentration for free of deformation [mol.m-3]": 0.0,
         "Negative electrode conductivity [S.m-1]": 215.0,
         "Primary: Maximum concentration in negative electrode [mol.m-3]": 28700.0,
         "Primary: Initial concentration in negative electrode [mol.m-3]": 27700.0,
@@ -591,6 +561,55 @@ def get_parameter_values():
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Secondary: Negative electrode density [kg.m-3]": 2650.0,
         "Secondary: Negative electrode OCP entropic change [V.K-1]": 0.0,
+        #cracking
+        "Primary: Negative electrode Poisson's ratio": 0.3,
+        "Primary: Negative electrode Young's modulus [Pa]": 15000000000.0,
+        "Primary: Negative electrode reference concentration for free of deformation [mol.m-3]"
+        "": 0.0,
+        "Primary: Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
+        "Primary: Negative electrode volume change": graphite_volume_change_Ai2020,
+        "Primary: Negative electrode initial crack length [m]": 2e-08,
+        "Primary: Negative electrode initial crack width [m]": 1.5e-08,
+        "Primary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
+        "Primary: Negative electrode Paris' law constant b": 1.12,
+        "Primary: Negative electrode Paris' law constant m": 2.2,
+        "Primary: Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
+        "Primary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Primary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
+        "Primary: Negative electrode LAM constant exponential term": 2.0,
+        "Primary: Negative electrode critical stress [Pa]": 60000000.0,
+        "Secondary: Negative electrode Poisson's ratio": 0.3,
+        "Secondary: Negative electrode Young's modulus [Pa]": 15000000000.0,
+        "Secondary: Negative electrode reference concentration for free of deformation [mol.m-3]"
+        "": 0.0,
+        "Secondary: Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
+        "Secondary: Negative electrode volume change": graphite_volume_change_Ai2020,
+        "Secondary: Negative electrode initial crack length [m]": 2e-08,
+        "Secondary: Negative electrode initial crack width [m]": 1.5e-08,
+        "Secondary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
+        "Secondary: Negative electrode Paris' law constant b": 1.12,
+        "Secondary: Negative electrode Paris' law constant m": 2.2,
+        "Secondary: Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
+        "Secondary: Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Secondary: Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
+        "Secondary: Negative electrode LAM constant exponential term": 2.0,
+        "Secondary: Negative electrode critical stress [Pa]": 60000000.0,
+        "Positive electrode Poisson's ratio": 0.2,
+        "Positive electrode Young's modulus [Pa]": 375000000000.0,
+        "Positive electrode reference concentration for free of deformation [mol.m-3]"
+        "": 0.0,
+        "Positive electrode partial molar volume [m3.mol-1]": 1.25e-05,
+        "Positive electrode volume change": volume_change_Ai2020,
+        "Positive electrode initial crack length [m]": 2e-08,
+        "Positive electrode initial crack width [m]": 1.5e-08,
+        "Positive electrode number of cracks per unit area [m-2]": 3180000000000000.0,
+        "Positive electrode Paris' law constant b": 1.12,
+        "Positive electrode Paris' law constant m": 2.2,
+        "Positive electrode cracking rate": cracking_rate_Ai2020,
+        "Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
+        "Positive electrode LAM constant exponential term": 2.0,
+        "Positive electrode critical stress [Pa]": 375000000.0,
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 0.18,
         "Maximum concentration in positive electrode [mol.m-3]": 63104.0,
