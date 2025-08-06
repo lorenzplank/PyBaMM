@@ -2,6 +2,86 @@ import numpy as np
 
 import pybamm
 
+def graphite_volume_change_Ai2020(sto):
+    """
+    Graphite particle volume change as a function of stoichiometry [1, 2].
+
+    References
+    ----------
+     .. [1] Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
+     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
+      DOI: 10.1149/2.0122001JES.
+     .. [2] Rieger, B., Erhard, S. V., Rumpf, K., & Jossen, A. (2016).
+     A new method to model the thickness change of a commercial pouch cell
+     during discharge. Journal of The Electrochemical Society, 163(8), A1566-A1575.
+
+    Parameters
+    ----------
+    sto: :class:`pybamm.Symbol`
+        Electrode stoichiometry, dimensionless
+        should be R-averaged particle concentration
+    Returns
+    -------
+    t_change:class:`pybamm.Symbol`
+        volume change, dimensionless, normalised by particle volume
+    """
+    p1 = 145.907
+    p2 = -681.229
+    p3 = 1334.442
+    p4 = -1415.710
+    p5 = 873.906
+    p6 = -312.528
+    p7 = 60.641
+    p8 = -5.706
+    p9 = 0.386
+    p10 = -4.966e-05
+    t_change = (
+        p1 * sto**9
+        + p2 * sto**8
+        + p3 * sto**7
+        + p4 * sto**6
+        + p5 * sto**5
+        + p6 * sto**4
+        + p7 * sto**3
+        + p8 * sto**2
+        + p9 * sto
+        + p10
+    )
+    return t_change
+
+
+def graphite_cracking_rate_Ai2020(T_dim):
+    """
+    Graphite particle cracking rate as a function of temperature [1, 2].
+
+    References
+    ----------
+     .. [1] Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
+     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
+      DOI: 10.1149/2.0122001JES.
+     .. [2] Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
+     Battery cycle life prediction with coupled chemical degradation and fatigue
+     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
+
+    Parameters
+    ----------
+    T_dim: :class:`pybamm.Symbol`
+        temperature, [K]
+
+    Returns
+    -------
+    k_cr: :class:`pybamm.Symbol`
+        cracking rate, [m/(Pa.m0.5)^m_cr]
+        where m_cr is another Paris' law constant
+    """
+    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
+    Eac_cr = 0  # to be implemented
+    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
+    return k_cr * arrhenius
+
+ #changed until here
 
 def graphite_LGM50_ocp_Chen2020(sto):
     """
@@ -267,6 +347,23 @@ def get_parameter_values():
         "Current function [A]": 5.0,
         "Contact resistance [Ohm]": 0,
         # negative electrode
+        "Negative electrode Poisson's ratio": 0.3,
+        "Negative electrode Young's modulus [Pa]": 15000000000.0,
+        "Negative electrode reference concentration for free of deformation [mol.m-3]"
+        "": 0.0,
+        "Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
+        "Negative electrode volume change": graphite_volume_change_Ai2020,
+        "Negative electrode initial crack length [m]": 2e-08,
+        "Negative electrode initial crack width [m]": 1.5e-08,
+        "Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
+        "Negative electrode Paris' law constant b": 1.12,
+        "Negative electrode Paris' law constant m": 2.2,
+        "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
+        "Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
+        "Negative electrode LAM constant exponential term": 2.0,
+        "Negative electrode critical stress [Pa]": 60000000.0,
+        #cracking until here
         "Negative electrode conductivity [S.m-1]": 215.0,
         "Maximum concentration in negative electrode [mol.m-3]": 33133.0,
         "Negative particle diffusivity [m2.s-1]": 3.3e-14,
