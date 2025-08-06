@@ -2,6 +2,35 @@ import numpy as np
 
 import pybamm
 
+def volume_change_Ai2020(sto):
+    """
+    Particle volume change as a function of stoichiometry [1, 2].
+
+    References
+    ----------
+     .. [1] > Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
+     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
+      DOI: 10.1149/2.0122001JES.
+     .. [2] > Rieger, B., Erhard, S. V., Rumpf, K., & Jossen, A. (2016).
+     A new method to model the thickness change of a commercial pouch cell
+     during discharge. Journal of The Electrochemical Society, 163(8), A1566-A1575.
+
+    Parameters
+    ----------
+    sto: :class:`pybamm.Symbol`
+        Electrode stoichiometry, dimensionless
+        should be R-averaged particle concentration
+    Returns
+    -------
+    t_change:class:`pybamm.Symbol`
+        volume change, dimensionless, normalised by particle volume
+    """
+    omega = pybamm.Parameter("Positive electrode partial molar volume [m3.mol-1]")
+    c_s_max = pybamm.Parameter("Maximum concentration in positive electrode [mol.m-3]")
+    t_change = omega * c_s_max * sto
+    return t_change
+
 def graphite_volume_change_Ai2020(sto):
     """
     Graphite particle volume change as a function of stoichiometry [1, 2].
@@ -77,6 +106,37 @@ def graphite_cracking_rate_Ai2020(T_dim):
         where m_cr is another Paris' law constant
     """
     k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
+    Eac_cr = 0  # to be implemented
+    arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
+    return k_cr * arrhenius
+
+def cracking_rate_Ai2020(T_dim):
+    """
+    Particle cracking rate as a function of temperature [1, 2].
+
+    References
+    ----------
+     .. [1] > Ai, W., Kraft, L., Sturm, J., Jossen, A., & Wu, B. (2020).
+     Electrochemical Thermal-Mechanical Modelling of Stress Inhomogeneity in
+     Lithium-Ion Pouch Cells. Journal of The Electrochemical Society, 167(1), 013512
+      DOI: 10.1149/2.0122001JES.
+     .. [2] > Deshpande, R., Verbrugge, M., Cheng, Y. T., Wang, J., & Liu, P. (2012).
+     Battery cycle life prediction with coupled chemical degradation and fatigue
+     mechanics. Journal of the Electrochemical Society, 159(10), A1730.
+
+    Parameters
+    ----------
+    T: :class:`pybamm.Symbol`
+        temperature, [K]
+
+    Returns
+    -------
+    k_cr: :class:`pybamm.Symbol`
+        cracking rate, [m/(Pa.m0.5)^m_cr]
+        where m_cr is another Paris' law constant
+    """
+    k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
     Eac_cr = 0  # to be implemented
     arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
     return k_cr * arrhenius
@@ -382,6 +442,23 @@ def get_parameter_values():
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
         "Negative electrode OCP entropic change [V.K-1]": 0.0,
         # positive electrode
+        "Positive electrode Poisson's ratio": 0.2,
+        "Positive electrode Young's modulus [Pa]": 375000000000.0,
+        "Positive electrode reference concentration for free of deformation [mol.m-3]"
+        "": 0.0,
+        "Positive electrode partial molar volume [m3.mol-1]": 1.25e-05,
+        "Positive electrode volume change": volume_change_Ai2020,
+        "Positive electrode initial crack length [m]": 2e-08,
+        "Positive electrode initial crack width [m]": 1.5e-08,
+        "Positive electrode number of cracks per unit area [m-2]": 3180000000000000.0,
+        "Positive electrode Paris' law constant b": 1.12,
+        "Positive electrode Paris' law constant m": 2.2,
+        "Positive electrode cracking rate": cracking_rate_Ai2020,
+        "Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
+        "Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
+        "Positive electrode LAM constant exponential term": 2.0,
+        "Positive electrode critical stress [Pa]": 375000000.0,
+        #cracking until here
         "Positive electrode conductivity [S.m-1]": 0.18,
         "Maximum concentration in positive electrode [mol.m-3]": 63104.0,
         "Positive particle diffusivity [m2.s-1]": 4e-15,
