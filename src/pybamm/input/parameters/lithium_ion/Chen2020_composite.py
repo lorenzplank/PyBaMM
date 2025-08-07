@@ -750,6 +750,7 @@ def get_parameter_values():
         "Primary: Lithium interstitial reference concentration [mol.m-3]": 15.0,
         "Primary: Initial SEI thickness [m]": 5e-09,
         "Primary: EC initial concentration in electrolyte [mol.m-3]": 4541.0,
+        "Primary: EC diffusivity [m2.s-1]": 2e-18,
         "Primary: Negative electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
         "EC initial concentration in electrolyte [mol.m-3]": 4541.0,
         "EC diffusivity [m2.s-1]": 2e-18,
