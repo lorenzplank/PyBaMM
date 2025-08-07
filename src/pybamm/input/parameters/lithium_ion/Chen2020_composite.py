@@ -83,7 +83,7 @@ def graphite_volume_change_Ai2020(sto):
 
 def silicon_volume_change_Ai2020(sto):
     """
-    Graphite particle volume change as a function of stoichiometry [1, 2].
+    Silicon particle volume change as a function of stoichiometry [1, 2].
 
     References
     ----------
@@ -105,28 +105,12 @@ def silicon_volume_change_Ai2020(sto):
     t_change:class:`pybamm.Symbol`
         volume change, dimensionless, normalised by particle volume
     """
-    p1 = 145.907
-    p2 = -681.229
-    p3 = 1334.442
-    p4 = -1415.710
-    p5 = 873.906
-    p6 = -312.528
-    p7 = 60.641
-    p8 = -5.706
-    p9 = 0.386
-    p10 = -4.966e-05
-    t_change = (
-        p1 * sto**9
-        + p2 * sto**8
-        + p3 * sto**7
-        + p4 * sto**6
-        + p5 * sto**5
-        + p6 * sto**4
-        + p7 * sto**3
-        + p8 * sto**2
-        + p9 * sto
-        + p10
-    )
+    p1 = 1.6
+
+    sto = np.linspace(0, 1, 100)
+    t_change =  (
+                p1 * sto
+                )
     return t_change
 
 def graphite_cracking_rate_Ai2020(T_dim):
@@ -765,6 +749,7 @@ def get_parameter_values():
         "Primary: SEI lithium interstitial diffusivity [m2.s-1]": 1e-20,
         "Primary: Lithium interstitial reference concentration [mol.m-3]": 15.0,
         "Primary: Initial SEI thickness [m]": 5e-09,
+        "Primary: EC initial concentration in electrolyte [mol.m-3]": 4541.0,
         "Primary: Negative electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
         "EC initial concentration in electrolyte [mol.m-3]": 4541.0,
         "EC diffusivity [m2.s-1]": 2e-18,
