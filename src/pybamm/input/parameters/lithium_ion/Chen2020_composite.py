@@ -1002,7 +1002,7 @@ def get_parameter_values():
         "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
         "Negative electrode Bruggeman coefficient (electrode)": 0,
         "Negative electrode charge transfer coefficient": 0.5,
-        "Negative electrode double-layer capacity [F.m-2]": 0.2,
+        "Primary: Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Primary: Negative electrode exchange-current density [A.m-2]"
         "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Primary: Negative electrode density [kg.m-3]": 1657.0,
@@ -1019,6 +1019,7 @@ def get_parameter_values():
         "Secondary: Negative electrode OCP [V]": silicon_ocp_average_Mark2016,
         "Secondary: Negative electrode active material volume fraction": 0.015,
         "Secondary: Negative particle radius [m]": 1.52e-06,
+        "Secondary: Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Secondary: Negative electrode exchange-current density [A.m-2]"
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Secondary: Negative electrode density [kg.m-3]": 2650.0,
