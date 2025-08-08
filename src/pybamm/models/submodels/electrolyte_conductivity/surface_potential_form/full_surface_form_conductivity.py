@@ -22,7 +22,7 @@ class BaseModel(BaseElectrolyteConductivity):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain, phase="", options=None):
+    def __init__(self, param, domain, phase="primary", options=None):
         super().__init__(param, domain, options)
         self.phase = phase
 
