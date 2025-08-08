@@ -54,7 +54,7 @@ class BaseModel(BaseElectrolyteConductivity):
             i_boundary_cc = variables["Current collector current density [A.m-2]"]
             c_e = variables[f"{Domain} electrolyte concentration [mol.m-3]"]
             delta_phi = variables[
-                f"{Domain} electrode surface potential difference [V]"
+                f"{Domain} electrode {self.phase}surface potential difference [V]"
             ]
             T = variables[f"{Domain} electrode temperature [K]"]
 
