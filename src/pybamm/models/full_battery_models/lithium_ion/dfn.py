@@ -136,12 +136,12 @@ class DFN(BaseModel):
                     if self.options.electrode_types.get(domain) == "planar":
                         if phase is None:
                             self.submodels[f"{domain} surface potential"] = surf_model(
-                                self.param, domain, self.options, phase=""
+                                self.param, domain,options= self.options, phase=""
                             )
                         else:
                             phase = phase + " "
                             self.submodels[f"{domain} {phase} surface potential"] = surf_model(
-                                self.param, domain, self.options, phase=phase
+                                self.param, domain, options= self.options, phase=phase
                             )
             
 
