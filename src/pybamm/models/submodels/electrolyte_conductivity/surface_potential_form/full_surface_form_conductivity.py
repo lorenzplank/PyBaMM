@@ -22,8 +22,9 @@ class BaseModel(BaseElectrolyteConductivity):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain, options=None):
+    def __init__(self, param, domain, phase="", options=None):
         super().__init__(param, domain, options)
+        self.phase = phase
 
     def get_fundamental_variables(self):
         if self.domain == "separator":
@@ -31,7 +32,7 @@ class BaseModel(BaseElectrolyteConductivity):
 
         domain, Domain = self.domain_Domain
         delta_phi = pybamm.Variable(
-            f"{Domain} electrode surface potential difference [V]",
+            f"{Domain} electrode {self.phase}surface potential difference [V]",
             domain=f"{domain} electrode",
             auxiliary_domains={"secondary": "current collector"},
             reference=self.domain_param.prim.U_init,

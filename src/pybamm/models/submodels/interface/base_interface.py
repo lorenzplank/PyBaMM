@@ -418,8 +418,7 @@ class BaseInterface(pybamm.BaseSubModel):
             }
         else:
             variables = {
-                f"X-averaged {domain} electrode "
-                "surface potential difference [V]": delta_phi_av,
+                f"X-averaged {domain} electrode surface potential difference [V]": delta_phi_av,
             }
 
         return variables
