@@ -262,25 +262,24 @@ class FullDifferential(BaseModel):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain, options=None):
-        super().__init__(param, domain, options)
-
+    def __init__(self, param, domain, phase, options=None):
+        super().__init__(param, domain, phase, options)
+        self.phase = phase
     def set_rhs(self, variables):
         if self.domain == "separator":
             return
 
         domain, Domain = self.domain_Domain
-
         T = variables[f"{Domain} electrode temperature [K]"]
         C_dl = self.domain_param.C_dl(T)
 
-        delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
+        delta_phi = variables[f"{Domain} electrode {self.phase} surface potential difference [V]"]
         i_e = variables[f"{Domain} electrolyte current density [A.m-2]"]
 
         sum_a_j = variables[
-            f"Sum of {domain} electrode volumetric "
+            f"Sum of {domain} electrode {self.phase} volumetric "
             "interfacial current densities [A.m-3]"
         ]
-        a = variables[f"{Domain} electrode surface area to volume ratio [m-1]"]
+        a = variables[f"{Domain} electrode {self.phase} surface area to volume ratio [m-1]"]
 
         self.rhs[delta_phi] = 1 / (a * C_dl) * (pybamm.div(i_e) - sum_a_j)
