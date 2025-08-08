@@ -1105,6 +1105,8 @@ def get_parameter_values():
         "Thermodynamic factor": 1.0,
         "Electrolyte diffusivity [m2.s-1]": electrolyte_diffusivity_Nyman2008,
         "Electrolyte conductivity [S.m-1]": electrolyte_conductivity_Nyman2008,
+        "Electrolyte diffusivity activation energy [J.mol-1]": 17000,
+        "Electrolyte conductivity activation energy [J.mol-1]": 17000,
         # experiment
         "Reference temperature [K]": 298.15,
         "Total heat transfer coefficient [W.m-2.K-1]": 10.0,
