@@ -18,8 +18,9 @@ class BaseElectrolyteConductivity(pybamm.BaseSubModel):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain=None, options=None):
+    def __init__(self, param, domain=None, phase="", options=None):
         super().__init__(param, domain, options=options)
+        self.phase = phase
 
     def _get_standard_potential_variables(self, phi_e_dict):
         """
@@ -183,7 +184,7 @@ class BaseElectrolyteConductivity(pybamm.BaseSubModel):
             delta_phi = pybamm.PrimaryBroadcast(delta_phi, f"{domain} electrode")
 
         variables = {
-            f"{Domain} electrode surface potential difference [V]": delta_phi,
+            f"{Domain} electrode {self.phase}surface potential difference [V]": delta_phi,
         }
 
         if Domain == "Negative":
