@@ -1,6 +1,8 @@
-import pybamm
 import os
+
 import numpy as np
+
+import pybamm
 
 
 def plating_exchange_current_density_OKane2020(c_e, c_Li, T):
@@ -117,8 +119,8 @@ def graphite_LGM50_diffusivity_Chen2020(sto, T):
        Solid diffusivity
     """
 
-    D_ref = 3.3e-14
-    E_D_s = 3.03e4
+    D_ref = pybamm.Parameter("Negative particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Negative particle diffusivity activation energy [J.mol-1]")
     # E_D_s not given by Chen et al (2020), so taken from Ecker et al. (2015) instead
     arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
@@ -156,8 +158,8 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
         Exchange-current density [A.m-2]
     """
 
-    m_ref = 6.48e-7  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
-    E_r = 35000
+    m_ref = pybamm.Parameter("Negative electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Negative electrode exchange-current density activation energy [J.mol-1]")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
@@ -237,7 +239,7 @@ def graphite_cracking_rate_Ai2020(T_dim):
         cracking rate, [m/(Pa.m0.5)^m_cr]
         where m_cr is another Paris' law constant
     """
-    k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
     Eac_cr = 0  # to be implemented
     arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
     return k_cr * arrhenius
@@ -268,8 +270,8 @@ def nmc_LGM50_diffusivity_Chen2020(sto, T):
         Solid diffusivity
     """
 
-    D_ref = 4e-15
-    E_D_s = 25000  # O'Kane et al. (2022), after Cabanero et al. (2018)
+    D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return D_ref * arrhenius
@@ -335,8 +337,8 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     :class:`pybamm.Symbol`
         Exchange-current density [A.m-2]
     """
-    m_ref = 3.42e-6  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
-    E_r = 17800
+    m_ref = pybamm.Parameter("Positive electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Positive electrode exchange-current density activation energy [J.mol-1]")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
@@ -398,6 +400,7 @@ def cracking_rate_Ai2020(T_dim):
         where m_cr is another Paris' law constant
     """
     k_cr = 3.9e-20
+    k_cr = pybamm.Parameter("Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]")
     Eac_cr = 0  # to be implemented
     arrhenius = np.exp(Eac_cr / pybamm.constants.R * (1 / T_dim - 1 / 298.15))
     return k_cr * arrhenius
@@ -435,7 +438,7 @@ def electrolyte_diffusivity_Nyman2008_arrhenius(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
     # So use temperature dependence from Ecker et al. (2015) instead
 
-    E_D_c_e = 17000
+    E_D_c_e = pybamm.Parameter("Electrolyte diffusivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_D_c_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return D_c_e * arrhenius
@@ -475,7 +478,7 @@ def electrolyte_conductivity_Nyman2008_arrhenius(c_e, T):
     # Nyman et al. (2008) does not provide temperature dependence
     # So use temperature dependence from Ecker et al. (2015) instead
 
-    E_sigma_e = 17000
+    E_sigma_e = pybamm.Parameter("Electrolyte conductivity activation energy [J.mol-1]")
     arrhenius = np.exp(E_sigma_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return sigma_e * arrhenius
@@ -506,6 +509,15 @@ def get_parameter_values():
     """
 
     return {
+        #adapted from O'Kane et al. (2022)
+        "Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Positive particle diffusivity constant [m2.s-1]": 4e-15,
+        "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
+        "Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
+        "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
         "chemistry": "lithium_ion",
         # lithium plating
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
@@ -590,6 +602,7 @@ def get_parameter_values():
         "Negative electrode Paris' law constant b": 1.12,
         "Negative electrode Paris' law constant m": 2.2,
         "Negative electrode cracking rate": graphite_cracking_rate_Ai2020,
+        "Negative electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
         "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Negative electrode LAM constant exponential term": 2.0,
         "Negative electrode critical stress [Pa]": 60000000.0,
@@ -623,6 +636,7 @@ def get_parameter_values():
         "Positive electrode Paris' law constant b": 1.12,
         "Positive electrode Paris' law constant m": 2.2,
         "Positive electrode cracking rate": cracking_rate_Ai2020,
+        "Positive electrode cracking rate constant [m/(Pa.m0.5)^m_cr]": 3.9e-20,
         "Positive electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Positive electrode LAM constant exponential term": 2.0,
         "Positive electrode critical stress [Pa]": 375000000.0,
@@ -637,6 +651,8 @@ def get_parameter_values():
         "Cation transference number": 0.2594,
         "Thermodynamic factor": 1.0,
         "Electrolyte diffusivity [m2.s-1]": electrolyte_diffusivity_Nyman2008_arrhenius,
+        "Electrolyte diffusivity activation energy [J.mol-1]": 17000,
+        "Electrolyte conductivity activation energy [J.mol-1]": 17000,
         "Electrolyte conductivity [S.m-1]"
         "": electrolyte_conductivity_Nyman2008_arrhenius,
         # experiment

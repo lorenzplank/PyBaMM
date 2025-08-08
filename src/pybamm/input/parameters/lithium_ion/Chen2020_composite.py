@@ -4,6 +4,188 @@ import numpy as np
 
 import pybamm
 
+#EIS functions
+def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
+    c_e, c_s_surf, c_s_max, T
+):
+    """
+    Exchange-current density for Butler-Volmer reactions between graphite and LiPF6 in
+    EC:DMC.
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_s_surf : :class:`pybamm.Symbol`
+        Particle concentration [mol.m-3]
+    c_s_max : :class:`pybamm.Symbol`
+        Maximum particle concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+
+    m_ref = pybamm.Parameter("Primary: Negative electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Primary: Negative electrode exchange-current density activation energy [J.mol-1]")
+    arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+
+def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
+    c_e, c_s_surf, c_s_max, T
+):
+    """
+    Exchange-current density for Butler-Volmer reactions between silicon and LiPF6 in
+    EC:DMC.
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_s_surf : :class:`pybamm.Symbol`
+        Particle concentration [mol.m-3]
+    c_s_max : :class:`pybamm.Symbol`
+        Maximum particle concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+
+    m_ref = pybamm.Parameter("Secondary: Negative electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Secondary: Negative electrode exchange-current density activation energy [J.mol-1]")
+    arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+
+def nmc_LGM50_diffusivity_Chen2020(sto, T):
+    """
+     NMC diffusivity as a function of stoichiometry, in this case the
+     diffusivity is taken to be a constant. The value is taken from [1].
+
+     References
+     ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+     Parameters
+     ----------
+     sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+     T: :class:`pybamm.Symbol`
+        Dimensional temperature
+
+     Returns
+     -------
+     :class:`pybamm.Symbol`
+        Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
+
+def electrolyte_diffusivity_Nyman2008_arrhenius(c_e, T):
+    """
+    Diffusivity of LiPF6 in EC:EMC (3:7) as a function of ion concentration. The data
+    comes from [1], with Arrhenius temperature dependence added from [2].
+
+    References
+    ----------
+    .. [1] A. Nyman, M. Behm, and G. Lindbergh, "Electrochemical characterisation and
+    modelling of the mass transport phenomena in LiPF6-EC-EMC electrolyte,"
+    Electrochim. Acta, vol. 53, no. 22, pp. 6356–6365, 2008.
+    .. [2] Ecker, Madeleine, et al. "Parameterization of a physico-chemical model of
+    a lithium-ion battery i. determination of parameters." Journal of the
+    Electrochemical Society 162.9 (2015): A1836-A1848.
+
+    Parameters
+    ----------
+    c_e: :class:`pybamm.Symbol`
+        Dimensional electrolyte concentration
+    T: :class:`pybamm.Symbol`
+        Dimensional temperature
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Solid diffusivity
+    """
+
+    D_c_e = 8.794e-11 * (c_e / 1000) ** 2 - 3.972e-10 * (c_e / 1000) + 4.862e-10
+
+    # Nyman et al. (2008) does not provide temperature dependence
+    # So use temperature dependence from Ecker et al. (2015) instead
+
+    E_D_c_e = pybamm.Parameter("Electrolyte diffusivity activation energy [J.mol-1]")
+    arrhenius = np.exp(E_D_c_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_c_e * arrhenius
+
+def electrolyte_conductivity_Nyman2008_arrhenius(c_e, T):
+    """
+    Conductivity of LiPF6 in EC:EMC (3:7) as a function of ion concentration. The data
+    comes from [1], with Arrhenius temperature dependence added from [2].
+
+    References
+    ----------
+    .. [1] A. Nyman, M. Behm, and G. Lindbergh, "Electrochemical characterisation and
+    modelling of the mass transport phenomena in LiPF6-EC-EMC electrolyte,"
+    Electrochim. Acta, vol. 53, no. 22, pp. 6356–6365, 2008.
+    .. [2] Ecker, Madeleine, et al. "Parameterization of a physico-chemical model of
+    a lithium-ion battery i. determination of parameters." Journal of the
+    Electrochemical Society 162.9 (2015): A1836-A1848.
+
+    Parameters
+    ----------
+    c_e: :class:`pybamm.Symbol`
+        Dimensional electrolyte concentration
+    T: :class:`pybamm.Symbol`
+        Dimensional temperature
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Solid diffusivity
+    """
+
+    sigma_e = (
+        0.1297 * (c_e / 1000) ** 3 - 2.51 * (c_e / 1000) ** 1.5 + 3.329 * (c_e / 1000)
+    )
+
+    # Nyman et al. (2008) does not provide temperature dependence
+    # So use temperature dependence from Ecker et al. (2015) instead
+
+    E_sigma_e = pybamm.Parameter("Electrolyte conductivity activation energy [J.mol-1]")
+    arrhenius = np.exp(E_sigma_e / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return sigma_e * arrhenius
+
 def volume_change_Ai2020(sto):
     """
     Particle volume change as a function of stoichiometry [1, 2].
@@ -712,6 +894,19 @@ def get_parameter_values():
 
     return {
         "chemistry": "lithium_ion",
+        #EIS parameters
+        "Primary: Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Primary: Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Secondary: Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Secondary: Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Positive particle diffusivity constant [m2.s-1]": 4e-15,
+        "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
+        "Primary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Primary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Secondary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Secondary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
+        "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
         #lithium plating
         # Plating parameters referred from OKane2022
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
