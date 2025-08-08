@@ -263,7 +263,7 @@ class FullDifferential(BaseModel):
     """
 
     def __init__(self, param, domain, options=None, phase=""):
-        super().__init__(param, domain, options, phase)
+        super().__init__(param, domain, options)
         self.phase = phase
     def set_rhs(self, variables):
         if self.domain == "separator":
