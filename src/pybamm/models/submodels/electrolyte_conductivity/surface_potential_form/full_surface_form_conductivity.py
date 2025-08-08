@@ -273,7 +273,7 @@ class FullDifferential(BaseModel):
         T = variables[f"{Domain} electrode temperature [K]"]
         C_dl = self.domain_param.C_dl(T)
 
-        delta_phi = variables[f"{Domain} electrode {self.phase}surface potential difference [V]"]
+        delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
         i_e = variables[f"{Domain} electrolyte current density [A.m-2]"]
 
         sum_a_j = variables[
