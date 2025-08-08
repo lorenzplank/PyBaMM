@@ -262,8 +262,8 @@ class FullDifferential(BaseModel):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain, phase, options=None):
-        super().__init__(param, domain, phase, options)
+    def __init__(self, param, domain, options=None, phase=""):
+        super().__init__(param, domain, options, phase)
         self.phase = phase
     def set_rhs(self, variables):
         if self.domain == "separator":
