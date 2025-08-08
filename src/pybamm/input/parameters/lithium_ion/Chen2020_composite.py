@@ -996,7 +996,7 @@ def get_parameter_values():
         "Primary: Initial concentration in negative electrode [mol.m-3]": 27700.0,
         "Primary: Negative particle diffusivity [m2.s-1]": 5.5e-14,
         "Primary: Negative electrode OCP [V]": graphite_ocp_Enertech_Ai2020,
-        "Negative electrode porosity": 0.25,
+        "Primary: Negative electrode porosity": 0.25,
         "Primary: Negative electrode active material volume fraction": 0.735,
         "Primary: Negative particle radius [m]": 5.86e-06,
         "Negative electrode Bruggeman coefficient (electrolyte)": 1.5,
@@ -1024,6 +1024,7 @@ def get_parameter_values():
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Secondary: Negative electrode density [kg.m-3]": 2650.0,
         "Secondary: Negative electrode OCP entropic change [V.K-1]": 0.0,
+        "Secondary: Negative electrode porosity": 0.25,
         #cracking
         "Primary: Initial SEI on cracks thickness [m]": 5e-13,
         "Primary: Negative electrode Poisson's ratio": 0.3,
