@@ -64,7 +64,7 @@ class BaseKinetics(BaseInterface):
             ]
         else:
             delta_phi = variables[
-                f"{Domain} electrode surface potential difference [V]"
+                f"{Domain} electrode {phase_name}surface potential difference [V]"
             ]
             # If delta_phi was broadcast, take only the orphan.
             if isinstance(delta_phi, pybamm.Broadcast):
