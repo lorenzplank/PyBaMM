@@ -140,7 +140,7 @@ class DFN(BaseModel):
                             )
                         else:
                             phase = phase + " "
-                            self.submodels[f"{domain} {phase} surface potential"] = surf_model(
+                            self.submodels[f"{domain} surface potential"] = surf_model(
                                 self.param, domain, options= self.options, phase=phase
                             )
             
