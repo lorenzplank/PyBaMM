@@ -22,7 +22,7 @@ class BaseModel(BaseElectrolyteConductivity):
         A dictionary of options to be passed to the model.
     """
 
-    def __init__(self, param, domain, phase="primary", options=None):
+    def __init__(self, param, domain, phase="", options=None):
         super().__init__(param, domain, options)
         self.phase = phase
 
@@ -170,7 +170,7 @@ class BaseModel(BaseElectrolyteConductivity):
         if self.domain == "separator":
             return
 
-        delta_phi_e = variables[f"{Domain} electrode surface potential difference [V]"]
+        delta_phi_e = variables[f"{Domain} electrode {self.phase}surface potential difference [V]"]
         delta_phi_e_init = self.domain_param.prim.U_init
 
         self.initial_conditions = {delta_phi_e: delta_phi_e_init}
@@ -182,7 +182,7 @@ class BaseModel(BaseElectrolyteConductivity):
             return
 
         c_e = variables[f"{Domain} electrolyte concentration [mol.m-3]"]
-        delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
+        delta_phi = variables[f"{Domain} electrode {self.phase}surface potential difference [V]"]
 
         grad_left = variables[f"{self.domain} grad(delta_phi) left"]
         grad_right = variables[f"{self.domain} grad(delta_phi) right"]
@@ -238,7 +238,7 @@ class FullAlgebraic(BaseModel):
         if self.domain == "separator":
             return
 
-        delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
+        delta_phi = variables[f"{Domain} electrode {self.phase}surface potential difference [V]"]
         i_e = variables[f"{Domain} electrolyte current density [A.m-2]"]
 
         # Variable summing all of the interfacial current densities
