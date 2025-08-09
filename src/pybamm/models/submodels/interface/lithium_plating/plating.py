@@ -92,7 +92,7 @@ class Plating(BasePlating):
             ) - j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating)
         elif lithium_plating_option == "irreversible":
             # j_stripping is zero when eta_plating > 0, otherwise follows exponential decay
-            j_stripping = (eta_plating <= 0) * (-j0_plating * pybamm.exp(-F_RT * alpha_plating * eta_plating))
+            j_stripping = (eta_plating <= 0) * (-j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating))
 
         variables.update(self._get_standard_overpotential_variables(eta_stripping))
         variables.update(self._get_standard_reaction_variables(j_stripping))
