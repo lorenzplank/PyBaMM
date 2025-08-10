@@ -94,7 +94,11 @@ class Plating(BasePlating):
         elif lithium_plating_option == "irreversible":
             # j_stripping is always negative, because there is no stripping, only
             # plating
-            j_stripping = (eta_plating <= 0) * (-j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating))
+            j_stripping = pybamm.if_then_else(
+                                                eta_plating <= 0,
+                                                -j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating),
+                                                pybamm.Scalar(0)
+                                            )
 
         variables.update(self._get_standard_overpotential_variables(eta_stripping))
         variables.update(self._get_standard_reaction_variables(j_stripping))
