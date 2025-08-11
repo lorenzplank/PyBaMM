@@ -76,7 +76,7 @@ class Plating(BasePlating):
         j0_stripping = phase_param.j0_stripping(c_e_n, c_plated_Li, T)
         j0_plating = phase_param.j0_plating(c_e_n, c_plated_Li, T)
 
-        eta_stripping = delta_phi + eta_sei
+        eta_stripping = delta_phi - eta_sei
         eta_plating = -eta_stripping
         F_RT = self.param.F / (self.param.R * T)
         # NEW: transfer coefficients can be set by the user
@@ -92,7 +92,9 @@ class Plating(BasePlating):
             ) - j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating)
         elif lithium_plating_option == "irreversible":
             # j_stripping is zero when eta_plating > 0, otherwise follows exponential decay
-            j_stripping = (eta_plating <= -0.35) * (-j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating))
+            j_stripping = pybamm.Maximum(0, eta_plating)/eta_plating * (
+                -j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating)
+            )
 
         variables.update(self._get_standard_overpotential_variables(eta_stripping))
         variables.update(self._get_standard_reaction_variables(j_stripping))
