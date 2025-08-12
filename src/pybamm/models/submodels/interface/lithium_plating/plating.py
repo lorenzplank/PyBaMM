@@ -82,6 +82,7 @@ class Plating(BasePlating):
         # NEW: transfer coefficients can be set by the user
         alpha_stripping = phase_param.alpha_stripping
         alpha_plating = phase_param.alpha_plating
+        sharpness = phase_param.sharpness
 
         lithium_plating_option = getattr(getattr(self.options, domain), self.phase)[
             "lithium plating"
@@ -92,7 +93,7 @@ class Plating(BasePlating):
             ) - j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating)
         elif lithium_plating_option == "irreversible":
             # j_stripping is zero when eta_plating > 0, otherwise follows exponential decay
-            j_stripping = 0.5 * (1 + pybamm.tanh(self._parameters["{Domain} electrode {self.phase_name}lithium plating potential sharpness"] * eta_plating)) * (
+            j_stripping = 0.5 * (1 + pybamm.tanh(sharpness * eta_plating)) * (
                 -j0_plating * pybamm.exp(F_RT * alpha_plating * eta_plating)
             )
 

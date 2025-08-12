@@ -909,8 +909,8 @@ def get_parameter_values():
         "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
         #lithium plating
         # Plating parameters referred from OKane2022
-        "Negative electrode primary lithium plating potential sharpness": 100,
-        "Negative electrode secondary lithium plating potential sharpness": 100,
+        "Primary: Negative particle lithium plating potential sharpness": 100,
+        "Secondary: Negative particle lithium plating potential sharpness": 100,
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
         "Primary: Lithium plating kinetic rate constant [m.s-1]": 1e-09,
         "Primary: Exchange-current density for plating [A.m-2]"
