@@ -391,7 +391,7 @@ class ParticleLithiumIonParameters(BaseParameters):
         self.alpha_stripping = 1 - self.alpha_plating
 
         self.sharpness = pybamm.Parameter(
-            f"{pref}particle lithium plating potential sharpness"
+            f"{pref}Lithium plating potential sharpness"
         )
 
         if main.options.electrode_types[domain] == "planar":
