@@ -1008,6 +1008,7 @@ def get_parameter_values():
         "Primary: Negative electrode exchange-current density [A.m-2]"
         "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Primary: Negative electrode density [kg.m-3]": 1657.0,
+        "Negative electrode density [kg.m-3]": 1657.0,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
         "Primary: Negative electrode OCP entropic change [V.K-1]": 0.0,
