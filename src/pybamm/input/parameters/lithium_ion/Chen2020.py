@@ -1,6 +1,17 @@
 import pybamm
 import numpy as np
+import os
 
+# Load data in the appropriate format
+path, _ = os.path.split(os.path.abspath(__file__))
+graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
+    "graphite_ocp_Enertech_Ai2020.csv", path=path
+)
+
+
+def graphite_ocp_Enertech_Ai2020(sto):
+    name, (x, y) = graphite_ocp_Enertech_Ai2020_data
+    return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
 
 def graphite_LGM50_ocp_Chen2020(sto):
     """
@@ -278,7 +289,7 @@ def get_parameter_values():
         "Negative electrode charge transfer coefficient": 0.5,
         "Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Negative electrode exchange-current density [A.m-2]"
-        "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
+        "": graphite_ocp_Enertech_Ai2020,
         "Negative electrode density [kg.m-3]": 1657.0,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
