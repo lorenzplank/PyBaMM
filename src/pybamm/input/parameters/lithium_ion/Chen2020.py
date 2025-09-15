@@ -280,7 +280,7 @@ def get_parameter_values():
         "Negative electrode conductivity [S.m-1]": 215.0,
         "Maximum concentration in negative electrode [mol.m-3]": 33133.0,
         "Negative particle diffusivity [m2.s-1]": 3.3e-14,
-        "Negative electrode OCP [V]": graphite_LGM50_ocp_Chen2020,
+        "Negative electrode OCP [V]": graphite_ocp_Enertech_Ai2020,
         "Negative electrode porosity": 0.25,
         "Negative electrode active material volume fraction": 0.75,
         "Negative particle radius [m]": 5.86e-06,
@@ -289,7 +289,7 @@ def get_parameter_values():
         "Negative electrode charge transfer coefficient": 0.5,
         "Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Negative electrode exchange-current density [A.m-2]"
-        "": graphite_ocp_Enertech_Ai2020,
+        "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Negative electrode density [kg.m-3]": 1657.0,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
