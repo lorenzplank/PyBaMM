@@ -387,6 +387,7 @@ def get_parameter_values():
         "Negative electrode LAM constant proportional term [s-1]": 2.7778e-07,
         "Negative electrode LAM constant exponential term": 2.0,
         "Negative electrode critical stress [Pa]": 60000000.0,
+        "Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
         # general
         "chemistry": "lithium_ion",
         "Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
