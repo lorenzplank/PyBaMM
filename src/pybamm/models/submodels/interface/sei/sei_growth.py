@@ -76,6 +76,7 @@ class SEIGrowth(BaseModel):
         return variables
 
     def get_coupled_variables(self, variables):
+        print("Getting coupled variables in SEI growth", flush=True)
         phase_param = self.phase_param
         domain, Domain = self.domain_Domain
         SEI_option = getattr(getattr(self.options, domain), self.phase)["SEI"]
