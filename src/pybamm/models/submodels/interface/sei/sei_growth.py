@@ -234,10 +234,12 @@ class SEIGrowth(BaseModel):
                 "interfacial current density [A.m-2]"
             ]
 
+        logfile = "/Users/sphere/code/Apex_physics/notebooks/results/sei_cracking.log"
+        self.logger = pybamm.get_new_logger(__name__, logfile)
         # The spreading term acts to spread out SEI along the cracks as they grow.
         # For SEI on initial surface (as opposed to cracks), it is zero.
         if self.reaction == "SEI on cracks":
-            pybamm.logger.error("Hello im in SEI cracking")
+            self.logger.error("Hello im in SEI cracking")
             if self.reaction_loc == "x-average":
                 l_cr = variables[f"X-averaged {domain} particle crack length [m]"]
                 dl_cr = variables[f"X-averaged {domain} particle cracking rate [m.s-1]"]
@@ -245,13 +247,13 @@ class SEIGrowth(BaseModel):
                 l_cr = variables[f"{Domain} particle crack length [m]"]
                 dl_cr = variables[f"{Domain} particle cracking rate [m.s-1]"]
             spreading = dl_cr / l_cr * (self.phase_param.L_sei_crack_0 - L_sei)
-            pybamm.logger.error(f"Crack length: {l_cr}")
-            pybamm.logger.error(f"Crack growth rate: {dl_cr}")
-            pybamm.logger.error(f"Initial crack SEI thickness: {self.phase_param.L_sei_crack_0}")
-            pybamm.logger.error(f"Current crack SEI thickness: {L_sei}")
+            self.logger.error(f"Crack length: {l_cr}")
+            self.logger.error(f"Crack growth rate: {dl_cr}")
+            self.logger.error(f"Initial crack SEI thickness: {self.phase_param.L_sei_crack_0}")
+            self.logger.error(f"Current crack SEI thickness: {L_sei}")
         else:
             spreading = 0
-        pybamm.logger.error(f"Spreading: {spreading}")
+        self.logger.error(f"Spreading: {spreading}")
         # a * j_sei / F is the rate of consumption of li moles by SEI reaction
         # 1/z_sei converts from li moles to SEI moles (z_sei=li mol per sei mol)
         # a * j_sei / (F * z_sei) is the rate of consumption of SEI moles by SEI
