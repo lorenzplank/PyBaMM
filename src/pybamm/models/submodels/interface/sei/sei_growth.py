@@ -74,7 +74,7 @@ class SEIGrowth(BaseModel):
         L_sei.print_name = "L_sei"
 
         variables = self._get_standard_thickness_variables(L_sei)
-
+        exit()
         return variables
 
     def get_coupled_variables(self, variables):
