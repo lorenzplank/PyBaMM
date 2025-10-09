@@ -236,6 +236,7 @@ class SEIGrowth(BaseModel):
 
         logfile = "/Users/sphere/code/Apex_physics/notebooks/results/sei_cracking.log"
         self.logger = pybamm.get_new_logger(__name__, logfile)
+        print("Hello im here", flush=True)
         # The spreading term acts to spread out SEI along the cracks as they grow.
         # For SEI on initial surface (as opposed to cracks), it is zero.
         if self.reaction == "SEI on cracks":
