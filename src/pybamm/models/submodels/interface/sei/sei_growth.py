@@ -2,9 +2,11 @@
 # Class for SEI growth
 #
 import pybamm
-
+import sys
 from .base_sei import BaseModel
 
+def err_print(*args, **kwargs):
+    print(*args, **kwargs, file=sys.stderr, flush=True)
 
 class SEIGrowth(BaseModel):
     """
@@ -76,7 +78,7 @@ class SEIGrowth(BaseModel):
         return variables
 
     def get_coupled_variables(self, variables):
-        print("Getting coupled variables in SEI growth", flush=True)
+        err_print("Getting coupled variables in SEI growth")
         phase_param = self.phase_param
         domain, Domain = self.domain_Domain
         SEI_option = getattr(getattr(self.options, domain), self.phase)["SEI"]
