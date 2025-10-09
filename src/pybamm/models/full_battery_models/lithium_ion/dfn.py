@@ -23,7 +23,7 @@ class DFN(BaseModel):
         # For degradation models we use the full form since this is a full-order model
         self.x_average = False
         super().__init__(options, name)
-
+        print("Hello im in DFN init", flush=True)
         self.set_submodels(build)
 
         pybamm.citations.register("Doyle1993")
