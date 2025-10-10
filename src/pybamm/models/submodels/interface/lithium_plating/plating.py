@@ -63,6 +63,7 @@ class Plating(BasePlating):
 
     def get_coupled_variables(self, variables):
         domain_param = self.domain_param
+        phase_param = self.phase_param
         domain, Domain = self.domain_Domain
         delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
         c_e_n = variables[f"{Domain} electrolyte concentration [mol.m-3]"]
@@ -74,7 +75,7 @@ class Plating(BasePlating):
             f"{Domain} {self.phase_name}lithium plating concentration [mol.m-3]"
         ]
         j0_stripping = domain_param.j0_stripping(c_e_n, c_plated_Li, T)
-        j0_plating = domain_param.j0_plating(c_e_n, c_plated_Li, T)
+        j0_plating = phase_param.j0_plating(c_e_n, c_plated_Li, T)
 
         eta_stripping = delta_phi - eta_sei
         eta_plating = -eta_stripping
