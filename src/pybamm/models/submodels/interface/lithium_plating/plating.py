@@ -27,7 +27,7 @@ class Plating(BasePlating):
 
     def get_fundamental_variables(self):
         domain, Domain = self.domain_Domain
-        scale = self.phase_param.c_Li_typ
+        scale = self.domain_param.c_Li_typ
         if self.x_average is True:
             c_plated_Li_av = pybamm.Variable(
                 f"X-averaged {domain} {self.phase_name}lithium plating concentration "
@@ -62,7 +62,7 @@ class Plating(BasePlating):
         return variables
 
     def get_coupled_variables(self, variables):
-        phase_param = self.phase_param
+        domain_param = self.domain_param
         domain, Domain = self.domain_Domain
         delta_phi = variables[f"{Domain} electrode surface potential difference [V]"]
         c_e_n = variables[f"{Domain} electrolyte concentration [mol.m-3]"]
@@ -73,16 +73,16 @@ class Plating(BasePlating):
         c_plated_Li = variables[
             f"{Domain} {self.phase_name}lithium plating concentration [mol.m-3]"
         ]
-        j0_stripping = phase_param.j0_stripping(c_e_n, c_plated_Li, T)
-        j0_plating = phase_param.j0_plating(c_e_n, c_plated_Li, T)
+        j0_stripping = domain_param.j0_stripping(c_e_n, c_plated_Li, T)
+        j0_plating = domain_param.j0_plating(c_e_n, c_plated_Li, T)
 
         eta_stripping = delta_phi - eta_sei
         eta_plating = -eta_stripping
         F_RT = self.param.F / (self.param.R * T)
         # NEW: transfer coefficients can be set by the user
-        alpha_stripping = phase_param.alpha_stripping
-        alpha_plating = phase_param.alpha_plating
-        sharpness = phase_param.sharpness
+        alpha_stripping = domain_param.alpha_stripping
+        alpha_plating = domain_param.alpha_plating
+        sharpness = domain_param.sharpness
 
         lithium_plating_option = getattr(getattr(self.options, domain), self.phase)[
             "lithium plating"
@@ -150,7 +150,7 @@ class Plating(BasePlating):
         elif lithium_plating_option == "partially reversible":
             # In the partially reversible plating model, the coupling term turns
             # reversible lithium into dead lithium over time.
-            dead_lithium_decay_rate = self.phase_param.dead_lithium_decay_rate(L_sei)
+            dead_lithium_decay_rate = self.domain_param.dead_lithium_decay_rate(L_sei)
             coupling_term = dead_lithium_decay_rate * c_plated_Li
             dc_plated_Li = -a_j_stripping / self.param.F - coupling_term
             dc_dead_Li = coupling_term
@@ -178,7 +178,7 @@ class Plating(BasePlating):
             c_dead_Li = variables[
                 f"{Domain} {phase_name}dead lithium concentration [mol.m-3]"
             ]
-        c_plated_Li_0 = self.phase_param.c_plated_Li_0
+        c_plated_Li_0 = self.domain_param.c_plated_Li_0
         zero = 0 * c_plated_Li_0
 
         self.initial_conditions = {c_plated_Li: c_plated_Li_0, c_dead_Li: zero}
