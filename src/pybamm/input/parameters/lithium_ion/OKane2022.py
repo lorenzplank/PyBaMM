@@ -531,6 +531,7 @@ def get_parameter_values():
         "Lithium plating transfer coefficient": 0.65,
         "Dead lithium decay constant [s-1]": 1e-06,
         "Dead lithium decay rate [s-1]": SEI_limited_dead_lithium_OKane2022,
+        "Lithium plating potential sharpness": 100,
         # sei
         "Ratio of lithium moles to SEI moles": 1.0,
         "SEI partial molar volume [m3.mol-1]": 9.585e-05,
