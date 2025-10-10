@@ -60,8 +60,8 @@ def graphite_SEI_limited_dead_lithium_OKane2022(L_sei):
         Dead lithium decay rate [s-1]
     """
 
-    gamma_0 = pybamm.Parameter("Primary: Dead lithium decay constant [s-1]")
-    L_sei_0 = pybamm.Parameter("Primary: Initial SEI thickness [m]")
+    gamma_0 = pybamm.Parameter("Dead lithium decay constant [s-1]")
+    L_sei_0 = pybamm.Parameter("Initial SEI thickness [m]")
 
     gamma = gamma_0 * L_sei_0 / L_sei
 
@@ -90,7 +90,7 @@ def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
         Exchange-current density [A.m-2]
     """
 
-    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
+    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
 
     return pybamm.constants.F * k_plating * c_e
 
