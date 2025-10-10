@@ -8,6 +8,92 @@ graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
     "graphite_ocp_Enertech_Ai2020.csv", path=path
 )
 
+def graphite_stripping_exchange_current_density_OKane2020(c_e, c_Li, T):
+    """
+    Exchange-current density for Li stripping reaction [A.m-2].
+
+    References
+    ----------
+
+    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
+    Monica Marinescu. "Physical origin of the differential voltage minimum associated
+    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
+    167, no. 9 (2020): 090540.
+
+    Parameters
+    ----------
+
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_Li : :class:`pybamm.Symbol`
+        Plated lithium concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+
+    Returns
+    -------
+
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+
+    k_plating = pybamm.Parameter("Lithium plating kinetic rate constant [m.s-1]")
+
+    return pybamm.constants.F * k_plating * c_Li
+
+def graphite_SEI_limited_dead_lithium_OKane2022(L_sei):
+    """
+    Decay rate for dead lithium formation [s-1].
+    References
+    ----------
+    .. [1] Simon E. J. O'Kane, Weilong Ai, Ganesh Madabattula, Diega Alonso-Alvarez,
+    Robert Timms, Valentin Sulzer, Jaqueline Sophie Edge, Billy Wu, Gregory J. Offer
+    and Monica Marinescu. "Lithium-ion battery degradation: how to model it."
+    Physical Chemistry: Chemical Physics 24, no. 13 (2022): 7909-7922.
+    Parameters
+    ----------
+    L_sei : :class:`pybamm.Symbol`
+        Total SEI thickness [m]
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Dead lithium decay rate [s-1]
+    """
+
+    gamma_0 = pybamm.Parameter("Primary: Dead lithium decay constant [s-1]")
+    L_sei_0 = pybamm.Parameter("Primary: Initial SEI thickness [m]")
+
+    gamma = gamma_0 * L_sei_0 / L_sei
+
+    return gamma
+
+def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
+    """
+    Exchange-current density for Li plating reaction [A.m-2].
+    References
+    ----------
+    .. [1] O’Kane, Simon EJ, Ian D. Campbell, Mohamed WJ Marzook, Gregory J. Offer, and
+    Monica Marinescu. "Physical origin of the differential voltage minimum associated
+    with lithium plating in Li-ion batteries." Journal of The Electrochemical Society
+    167, no. 9 (2020): 090540.
+    Parameters
+    ----------
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_Li : :class:`pybamm.Symbol`
+        Plated lithium concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+
+    k_plating = pybamm.Parameter("Primary: Lithium plating kinetic rate constant [m.s-1]")
+
+    return pybamm.constants.F * k_plating * c_e
+
 def graphite_LGM50_diffusivity_Chen2020(sto, T):
     """
     LG M50 Graphite diffusivity as a function of stoichiometry, in this case the
@@ -375,6 +461,17 @@ def get_parameter_values():
     """
 
     return {
+        #lithium plating
+        "Lithium plating potential sharpness": 100,
+        "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
+        "Lithium plating kinetic rate constant [m.s-1]": 1e-09,
+        "Exchange-current density for plating [A.m-2]": graphite_plating_exchange_current_density_OKane2020,
+        "Exchange-current density for stripping [A.m-2]": graphite_stripping_exchange_current_density_OKane2020,
+        "Initial plated lithium concentration [mol.m-3]": 0.0,
+        "Typical plated lithium concentration [mol.m-3]": 1000.0,
+        "Lithium plating transfer coefficient": 0.65,
+        "Dead lithium decay constant [s-1]": 1e-06,
+        "Dead lithium decay rate [s-1]": graphite_SEI_limited_dead_lithium_OKane2022,
         # cracking
         "Negative electrode volume change": graphite_volume_change_Ai2020,
         "Negative electrode initial crack length [m]": 2e-08,
