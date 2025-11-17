@@ -12,7 +12,7 @@ parameters = [
     "Chen2020",
     "OKane2022",
     "Ecker2015",
-    "Chen2020_mod"
+    "Chen2020_mod",
     "Chen_2020_composite_mod"
 ]
 
