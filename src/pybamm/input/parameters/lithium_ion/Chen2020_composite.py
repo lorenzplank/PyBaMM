@@ -1137,8 +1137,8 @@ def get_parameter_values():
         "Initial concentration in electrolyte [mol.m-3]": 1000.0,
         "Cation transference number": 0.2594,
         "Thermodynamic factor": 1.0,
-        "Electrolyte diffusivity [m2.s-1]": electrolyte_diffusivity_Nyman2008,
-        "Electrolyte conductivity [S.m-1]": electrolyte_conductivity_Nyman2008,
+        "Electrolyte diffusivity [m2.s-1]": electrolyte_diffusivity_Nyman2008_arrhenius,
+        "Electrolyte conductivity [S.m-1]": electrolyte_conductivity_Nyman2008_arrhenius,
         "Electrolyte diffusivity activation energy [J.mol-1]": 17000,
         "Electrolyte conductivity activation energy [J.mol-1]": 17000,
         # experiment
