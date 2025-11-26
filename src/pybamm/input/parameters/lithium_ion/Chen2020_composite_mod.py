@@ -637,6 +637,100 @@ def graphite_ocp_Enertech_Ai2020(sto):
     name, (x, y) = graphite_ocp_Enertech_Ai2020_data
     return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
 
+def graphite_LGM50_diffusivity_Chen2020(sto, T):
+    """
+    LG M50 Graphite diffusivity as a function of stoichiometry, in this case the
+    diffusivity is taken to be a constant. The value is taken from [1].
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+    T: :class:`pybamm.Symbol`
+       Dimensional temperature
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+       Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Primary: Negative particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Primary: Negative particle diffusivity activation energy [J.mol-1]")
+    # E_D_s not given by Chen et al (2020), so taken from Ecker et al. (2015) instead
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
+
+def silicon_diffusivity_Lorenz2025(sto, T):
+    """
+    LG M50 Graphite diffusivity as a function of stoichiometry, in this case the
+    diffusivity is taken to be a constant. The value is taken from [1].
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+    T: :class:`pybamm.Symbol`
+       Dimensional temperature
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+       Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Secondary: Negative particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Secondary: Negative particle diffusivity activation energy [J.mol-1]")
+    # E_D_s not given by Chen et al (2020), so taken from Ecker et al. (2015) instead
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
+
+def nmc_LGM50_diffusivity_Chen2020(sto, T):
+    """
+     NMC diffusivity as a function of stoichiometry, in this case the
+     diffusivity is taken to be a constant. The value is taken from [1].
+
+     References
+     ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+     Parameters
+     ----------
+     sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+     T: :class:`pybamm.Symbol`
+        Dimensional temperature
+
+     Returns
+     -------
+     :class:`pybamm.Symbol`
+        Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
 
 # Call dict via a function to avoid errors when editing in place
 def get_parameter_values():
@@ -651,6 +745,13 @@ def get_parameter_values():
 
     return {
         "chemistry": "lithium_ion",
+        #diffusivity activation energies
+        "Primary: Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Primary: Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Secondary: Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Secondary: Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Positive particle diffusivity constant [m2.s-1]": 4e-15,
+        "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
         # sei
         "Primary: Ratio of lithium moles to SEI moles": 2.0,
         "Primary: SEI partial molar volume [m3.mol-1]": 9.585e-05,
@@ -733,7 +834,7 @@ def get_parameter_values():
         "Negative electrode conductivity [S.m-1]": 215.0,
         "Primary: Maximum concentration in negative electrode [mol.m-3]": 28700.0,
         "Primary: Initial concentration in negative electrode [mol.m-3]": 27700.0,
-        "Primary: Negative particle diffusivity [m2.s-1]": 5.5e-14,
+        "Primary: Negative particle diffusivity [m2.s-1]": graphite_LGM50_diffusivity_Chen2020,
         "Primary: Negative electrode OCP [V]": graphite_ocp_Enertech_Ai2020,
         "Negative electrode porosity": 0.25,
         "Primary: Negative electrode active material volume fraction": 0.735,
@@ -750,7 +851,7 @@ def get_parameter_values():
         "Primary: Negative electrode OCP entropic change [V.K-1]": 0.0,
         "Secondary: Maximum concentration in negative electrode [mol.m-3]": 278000.0,
         "Secondary: Initial concentration in negative electrode [mol.m-3]": 276610.0,
-        "Secondary: Negative particle diffusivity [m2.s-1]": 1.67e-14,
+        "Secondary: Negative particle diffusivity [m2.s-1]": silicon_diffusivity_Lorenz2025,
         "Secondary: Negative electrode lithiation OCP [V]"
         "": silicon_ocp_lithiation_Mark2016,
         "Secondary: Negative electrode delithiation OCP [V]"
@@ -831,7 +932,7 @@ def get_parameter_values():
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 0.18,
         "Maximum concentration in positive electrode [mol.m-3]": 63104.0,
-        "Positive particle diffusivity [m2.s-1]": 4e-15,
+        "Positive particle diffusivity [m2.s-1]": nmc_LGM50_diffusivity_Chen2020,
         "Positive electrode OCP [V]": nmc_LGM50_ocp_Chen2020,
         "Positive electrode porosity": 0.335,
         "Positive electrode active material volume fraction": 0.665,
@@ -846,7 +947,7 @@ def get_parameter_values():
         "Positive electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Positive electrode thermal conductivity [W.m-1.K-1]": 2.1,
         "Positive electrode OCP entropic change [V.K-1]": 0.0,
-        # separator
+        # separatorpar
         "Separator porosity": 0.47,
         "Separator Bruggeman coefficient (electrolyte)": 1.5,
         "Separator density [kg.m-3]": 397.0,
