@@ -549,44 +549,6 @@ def silicon_ocp_average_Mark2016(sto):
     ) / 2
 
 
-def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
-    c_e, c_s_surf, c_s_max, T
-):
-    """
-    Exchange-current density for Butler-Volmer reactions between silicon and LiPF6 in
-    EC:DMC.
-
-    References
-    ----------
-    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
-    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
-    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
-    Electrochemical Society 167 (2020): 080534.
-
-    Parameters
-    ----------
-    c_e : :class:`pybamm.Symbol`
-        Electrolyte concentration [mol.m-3]
-    c_s_surf : :class:`pybamm.Symbol`
-        Particle concentration [mol.m-3]
-    c_s_max : :class:`pybamm.Symbol`
-        Maximum particle concentration [mol.m-3]
-    T : :class:`pybamm.Symbol`
-        Temperature [K]
-
-    Returns
-    -------
-    :class:`pybamm.Symbol`
-        Exchange-current density [A.m-2]
-    """
-
-    m_ref = (
-        6.48e-7 * 28700 / 278000
-    )  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
-    E_r = 35000
-    arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
-
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
 
 
 def nmc_LGM50_ocp_Chen2020(sto):
@@ -1051,7 +1013,7 @@ def get_parameter_values():
         "": silicon_ocp_delithiation_Mark2016,
         "Secondary: Negative electrode OCP [V]": silicon_ocp_average_Mark2016,
         "Secondary: Negative electrode active material volume fraction": 0.015,
-        "Secondary: Negative particle radius [m]": 1.52e-06,
+        "Secondary: Negative particle radius [m]": 5.52e-06,
         "Secondary: Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Secondary: Negative electrode exchange-current density [A.m-2]"
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
