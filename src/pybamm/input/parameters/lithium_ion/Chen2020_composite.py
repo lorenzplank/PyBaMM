@@ -1082,7 +1082,7 @@ def get_parameter_values():
         "Secondary: Negative electrode reference concentration for free of deformation [mol.m-3]"
         "": 0.0,
         "Secondary: Negative electrode partial molar volume [m3.mol-1]": 3.1e-06,
-        "Secondary: Negative electrode volume change": graphite_volume_change_Ai2020,
+        "Secondary: Negative electrode volume change": silicon_volume_change_Ai2020,
         "Secondary: Negative electrode initial crack length [m]": 2e-08,
         "Secondary: Negative electrode initial crack width [m]": 1.5e-08,
         "Secondary: Negative electrode number of cracks per unit area [m-2]": 3180000000000000.0,
