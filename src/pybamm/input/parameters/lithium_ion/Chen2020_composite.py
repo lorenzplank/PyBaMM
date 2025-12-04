@@ -354,7 +354,6 @@ def silicon_volume_change_Ai2020(sto):
     """
     p1 = 1.6
 
-    sto = np.linspace(0, 1, 100)
     t_change =  (
                 p1 * sto
                 )
