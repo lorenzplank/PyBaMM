@@ -453,7 +453,7 @@ def get_parameter_values():
         "EC initial concentration in electrolyte [mol.m-3]": 4541.0,
         "EC diffusivity [m2.s-1]": 2e-18,
         "SEI kinetic rate constant [m.s-1]": 5e-9,
-        "SEI growth activation energy [J.mol-1]": 0.0,
+        "SEI growth activation energy [J.mol-1]": 38000.0,
         "Negative electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
         "Positive electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
         "Initial SEI on cracks thickness [m]": 5e-13,  # avoid division by zero
