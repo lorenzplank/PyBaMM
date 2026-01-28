@@ -294,7 +294,7 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
     return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
-
+    
 
 def LFP_ocp_Afshar2017(sto):
     """
@@ -445,14 +445,14 @@ def get_parameter_values():
         "SEI resistivity [Ohm.m]": 200000.0,
         "SEI solvent diffusivity [m2.s-1]": 2.5e-22,
         "Bulk solvent concentration [mol.m-3]": 2636.0,
-        "SEI open-circuit potential [V]": 0.4,
+        "SEI open-circuit potential [V]": 0.5,
         "SEI electron conductivity [S.m-1]": 8.95e-14,
         "SEI lithium interstitial diffusivity [m2.s-1]": 1e-20,
         "Lithium interstitial reference concentration [mol.m-3]": 15.0,
         "Initial SEI thickness [m]": 5e-09,
         "EC initial concentration in electrolyte [mol.m-3]": 4541.0,
         "EC diffusivity [m2.s-1]": 2e-18,
-        "SEI kinetic rate constant [m.s-1]": 1e-12,
+        "SEI kinetic rate constant [m.s-1]": 5e-9,
         "SEI growth activation energy [J.mol-1]": 0.0,
         "Negative electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
         "Positive electrode reaction-driven LAM factor [m3.mol-1]": 0.0,
