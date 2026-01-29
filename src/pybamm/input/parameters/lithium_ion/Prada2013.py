@@ -1,5 +1,16 @@
 import pybamm
 import numpy as np
+import os
+
+# Load data in the appropriate format
+path, _ = os.path.split(os.path.abspath(__file__))
+graphite_ocp_Enertech_Ai2020_data = pybamm.parameters.process_1D_data(
+    "graphite_ocp_Enertech_Ai2020.csv", path=path
+)
+
+def graphite_ocp_Enertech_Ai2020(sto):
+    name, (x, y) = graphite_ocp_Enertech_Ai2020_data
+    return pybamm.Interpolant(x, y, sto, name=name, interpolator="cubic")
 
 def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
     """
@@ -469,9 +480,9 @@ def get_parameter_values():
         "Contact resistance [Ohm]": 0,
         # negative electrode
         "Negative electrode conductivity [S.m-1]": 215.0,
-        "Maximum concentration in negative electrode [mol.m-3]": 30555,
+        "Maximum concentration in negative electrode [mol.m-3]": 33133.0,
         "Negative particle diffusivity [m2.s-1]": 3e-15,
-        "Negative electrode OCP [V]": graphite_LGM50_ocp_Chen2020,
+        "Negative electrode OCP [V]": graphite_ocp_Enertech_Ai2020,
         "Negative electrode porosity": 0.36,
         "Negative electrode active material volume fraction": 0.58,
         "Negative particle radius [m]": 5e-6,
@@ -479,8 +490,7 @@ def get_parameter_values():
         "Negative electrode Bruggeman coefficient (electrode)": 1.5,
         "Negative electrode charge transfer coefficient": 0.5,
         "Negative electrode double-layer capacity [F.m-2]": 0.2,
-        "Negative electrode exchange-current density [A.m-2]"
-        "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
+        "Negative electrode exchange-current density [A.m-2]": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Negative electrode OCP entropic change [V.K-1]": 0,
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 0.33795074,
