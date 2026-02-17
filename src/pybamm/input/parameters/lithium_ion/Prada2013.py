@@ -450,7 +450,7 @@ def get_parameter_values():
         "Positive electrode LAM constant exponential term": 2.0,
         "Positive electrode critical stress [Pa]": 375000000.0,
         # sei
-        "Ratio of lithium moles to SEI moles": 1.0,
+        "Ratio of lithium moles to SEI moles": 2.0,
         "SEI partial molar volume [m3.mol-1]": 9.585e-05,
         "SEI reaction exchange current density [A.m-2]": 1.5e-07,
         "SEI resistivity [Ohm.m]": 200000.0,

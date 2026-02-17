@@ -653,10 +653,7 @@ def get_parameter_values():
         "Positive electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Positive electrode thermal conductivity [W.m-1.K-1]": 2.1,
         "Positive electrode OCP entropic change [V.K-1]": 0.0,
-        "Positive electrode partial molar volume [m3.mol-1]": 1.25e-05,
-        "Positive electrode Poisson's ratio": 0.2,
-        "Positive electrode Young's modulus [Pa]": 375000000000.0,
-        "Positive electrode reference concentration for free of deformation [mol.m-3]": 0.0,
+        
         # separator
         "Separator porosity": 0.47,
         "Separator Bruggeman coefficient (electrolyte)": 1.5,
