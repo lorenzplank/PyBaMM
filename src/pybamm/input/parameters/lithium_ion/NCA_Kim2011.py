@@ -1,6 +1,69 @@
 import pybamm
 import numpy as np
 
+def graphite_LGM50_diffusivity_Chen2020(sto, T):
+    """
+    LG M50 Graphite diffusivity as a function of stoichiometry, in this case the
+    diffusivity is taken to be a constant. The value is taken from [1].
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+    T: :class:`pybamm.Symbol`
+       Dimensional temperature
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+       Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Negative particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Negative particle diffusivity activation energy [J.mol-1]")
+    # E_D_s not given by Chen et al (2020), so taken from Ecker et al. (2015) instead
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
+
+def nmc_LGM50_diffusivity_Chen2020(sto, T):
+    """
+     NMC diffusivity as a function of stoichiometry, in this case the
+     diffusivity is taken to be a constant. The value is taken from [1].
+
+     References
+     ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+     Parameters
+     ----------
+     sto: :class:`pybamm.Symbol`
+       Electrode stoichiometry
+     T: :class:`pybamm.Symbol`
+        Dimensional temperature
+
+     Returns
+     -------
+     :class:`pybamm.Symbol`
+        Solid diffusivity
+    """
+
+    D_ref = pybamm.Parameter("Positive particle diffusivity constant [m2.s-1]")
+    E_D_s = pybamm.Parameter("Positive particle diffusivity activation energy [J.mol-1]")
+    arrhenius = np.exp(E_D_s / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return D_ref * arrhenius
+
 def graphite_plating_exchange_current_density_OKane2020(c_e, c_Li, T):
     """
     Exchange-current density for Li plating reaction [A.m-2].
@@ -600,7 +663,7 @@ def get_parameter_values():
         "Separator thickness [m]": 2.5e-05,
         "Positive electrode thickness [m]": 5e-05,
         "Positive current collector thickness [m]": 1e-05,
-        "Electrode height [m]": 0.2,
+        "Electrode height [m]": 0.065,
         "Electrode width [m]": 0.14,
         "Negative tab width [m]": 0.044,
         "Negative tab centre y-coordinate [m]": 0.013,
@@ -639,10 +702,15 @@ def get_parameter_values():
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.1339,
         "Negative electrode OCP entropic change [V.K-1]": 0.0,
+        # particle diffusivity
+        "Negative particle diffusivity constant [m2.s-1]": 3.3e-14,
+        "Negative particle diffusivity activation energy [J.mol-1]": 30300.0,
+        "Positive particle diffusivity constant [m2.s-1]": 4e-15,
+        "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
         # positive electrode
         "Positive electrode conductivity [S.m-1]": 10.0,
         "Maximum concentration in positive electrode [mol.m-3]": 49000.0,
-        "Positive particle diffusivity [m2.s-1]": nca_diffusivity_Kim2011,
+        "Positive particle diffusivity [m2.s-1]": nmc_LGM50_diffusivity_Chen2020,
         "Positive electrode OCP [V]": nca_ocp_Kim2011,
         "Positive electrode porosity": 0.4,
         "Positive electrode active material volume fraction": 0.41,
