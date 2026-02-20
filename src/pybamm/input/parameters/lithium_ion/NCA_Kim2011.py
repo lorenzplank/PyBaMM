@@ -394,6 +394,41 @@ def graphite_electrolyte_exchange_current_density_Kim2011(c_e, c_s_surf, c_s_max
         m_ref * arrhenius * c_e**alpha * c_s_surf**alpha * (c_s_max - c_s_surf) ** alpha
     )
 
+def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
+    c_e, c_s_surf, c_s_max, T
+):
+    """
+    Exchange-current density for Butler-Volmer reactions between graphite and LiPF6 in
+    EC:DMC.
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_s_surf : :class:`pybamm.Symbol`
+        Particle concentration [mol.m-3]
+    c_s_max : :class:`pybamm.Symbol`
+        Maximum particle concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+    m_ref = pybamm.Parameter("Negative electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Negative electrode exchange-current density activation energy [J.mol-1]")
+    arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
 
 def nca_diffusivity_Kim2011(sto, T):
     """
@@ -466,6 +501,40 @@ def nca_electrolyte_exchange_current_density_Kim2011(c_e, c_s_surf, c_s_max, T):
     return (
         m_ref * arrhenius * c_e**alpha * c_s_surf**alpha * (c_s_max - c_s_surf) ** alpha
     )
+
+def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_max, T):
+    """
+    Exchange-current density for Butler-Volmer reactions between NMC and LiPF6 in
+    EC:DMC.
+
+    References
+    ----------
+    .. [1] Chang-Hui Chen, Ferran Brosa Planella, Kieran O’Regan, Dominika Gastol, W.
+    Dhammika Widanage, and Emma Kendrick. "Development of Experimental Techniques for
+    Parameterization of Multi-scale Lithium-ion Battery Models." Journal of the
+    Electrochemical Society 167 (2020): 080534.
+
+    Parameters
+    ----------
+    c_e : :class:`pybamm.Symbol`
+        Electrolyte concentration [mol.m-3]
+    c_s_surf : :class:`pybamm.Symbol`
+        Particle concentration [mol.m-3]
+    c_s_max : :class:`pybamm.Symbol`
+        Maximum particle concentration [mol.m-3]
+    T : :class:`pybamm.Symbol`
+        Temperature [K]
+
+    Returns
+    -------
+    :class:`pybamm.Symbol`
+        Exchange-current density [A.m-2]
+    """
+    m_ref = pybamm.Parameter("Positive electrode kinetic rate constant [A.m-2]")
+    E_r = pybamm.Parameter("Positive electrode exchange-current density activation energy [J.mol-1]")
+    arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
+
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
 
 
 def electrolyte_diffusivity_Kim2011(c_e, T):
@@ -595,6 +664,11 @@ def get_parameter_values():
 
     return {
         "chemistry": "lithium_ion",
+        #Exchangecurrent densities form Okane2020
+        "Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
+        "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,    
         #lithium plating
         "Lithium plating potential sharpness": 100,
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
@@ -697,7 +771,7 @@ def get_parameter_values():
         "Negative electrode charge transfer coefficient": 0.5,
         "Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Negative electrode exchange-current density [A.m-2]"
-        "": graphite_electrolyte_exchange_current_density_Kim2011,
+        "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Negative electrode density [kg.m-3]": 2136.43638,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.1339,
@@ -720,7 +794,7 @@ def get_parameter_values():
         "Positive electrode charge transfer coefficient": 0.5,
         "Positive electrode double-layer capacity [F.m-2]": 0.2,
         "Positive electrode exchange-current density [A.m-2]"
-        "": nca_electrolyte_exchange_current_density_Kim2011,
+        "": nmc_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Positive electrode density [kg.m-3]": 4205.82708,
         "Positive electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Positive electrode thermal conductivity [W.m-1.K-1]": 1.4007,
