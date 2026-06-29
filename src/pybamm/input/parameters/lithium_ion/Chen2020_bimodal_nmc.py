@@ -304,9 +304,11 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
     """
     m_ref = 6.48e-7  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
     E_r = 35000
+    alpha = pybamm.Parameter("Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def nmc_LGM50_ocp_Chen2020(sto):
@@ -373,9 +375,11 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     """
     m_ref = 3.42e-6  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
     E_r = 17800
+    alpha = pybamm.Parameter("Positive electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Positive electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def electrolyte_diffusivity_Nyman2008(c_e, T):
@@ -552,6 +556,8 @@ def get_parameter_values():
         "Negative electrode charge transfer coefficient": 0.5,
         "Negative electrode double-layer capacity [F.m-2]": 0.2,
         "Negative electrode exchange-current density [A.m-2]": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
+        "Negative electrode exchange-current density alpha": 0.5,
+        "Negative electrode exchange-current density beta": 0.5,
         "Negative electrode density [kg.m-3]": 1657.0,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
@@ -562,6 +568,8 @@ def get_parameter_values():
         "Positive electrode Bruggeman coefficient (electrolyte)": 1.5,
         "Positive electrode Bruggeman coefficient (electrode)": 0,
         "Positive electrode charge transfer coefficient": 0.5,
+        "Positive electrode exchange-current density alpha": 0.5,
+        "Positive electrode exchange-current density beta": 0.5,
         # positive electrode - primary phase (3 μm particles)
         "Primary: Maximum concentration in positive electrode [mol.m-3]": 63104.0,
         "Primary: Initial concentration in positive electrode [mol.m-3]": 17038.0,

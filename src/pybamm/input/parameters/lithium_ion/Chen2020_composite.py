@@ -38,9 +38,11 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
 
     m_ref = pybamm.Parameter("Primary: Negative electrode kinetic rate constant [A.m-2]")
     E_r = pybamm.Parameter("Primary: Negative electrode exchange-current density activation energy [J.mol-1]")
+    alpha = pybamm.Parameter("Primary: Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Primary: Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
     c_e, c_s_surf, c_s_max, T
@@ -75,9 +77,11 @@ def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
 
     m_ref = pybamm.Parameter("Secondary: Negative electrode kinetic rate constant [A.m-2]")
     E_r = pybamm.Parameter("Secondary: Negative electrode exchange-current density activation energy [J.mol-1]")
+    alpha = pybamm.Parameter("Secondary: Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Secondary: Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 def nmc_LGM50_diffusivity_Chen2020(sto, T):
     """
@@ -615,9 +619,11 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     """
     m_ref = 3.42e-6  # (A/m2)(m3/mol)**1.5 - includes ref concentrations
     E_r = 17800
+    alpha = pybamm.Parameter("Positive electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Positive electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def electrolyte_diffusivity_Nyman2008(c_e, T):
@@ -895,10 +901,16 @@ def get_parameter_values():
         "Positive particle diffusivity activation energy [J.mol-1]": 25000.0,
         "Primary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
         "Primary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Primary: Negative electrode exchange-current density alpha": 0.5,
+        "Primary: Negative electrode exchange-current density beta": 0.5,
         "Secondary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
         "Secondary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Secondary: Negative electrode exchange-current density alpha": 0.5,
+        "Secondary: Negative electrode exchange-current density beta": 0.5,
         "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
         "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
+        "Positive electrode exchange-current density alpha": 0.5,
+        "Positive electrode exchange-current density beta": 0.5,
         #lithium plating
         # Plating parameters referred from OKane2022
         "Primary: Lithium plating potential sharpness": 100,
