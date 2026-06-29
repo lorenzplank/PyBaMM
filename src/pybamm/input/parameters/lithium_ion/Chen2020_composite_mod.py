@@ -269,9 +269,11 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
     E_r = pybamm.Parameter(
         "Primary: Negative electrode exchange-current density activation energy [J.mol-1]"
     )
+    alpha = pybamm.Parameter("Primary: Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Primary: Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def silicon_ocp_lithiation_Mark2016(sto):
@@ -405,9 +407,11 @@ def silicon_LGM50_electrolyte_exchange_current_density_Chen2020(
     E_r = pybamm.Parameter(
         "Secondary: Negative electrode exchange-current density activation energy [J.mol-1]"
     )
+    alpha = pybamm.Parameter("Secondary: Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Secondary: Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def nmc_LGM50_ocp_Chen2020(sto):
@@ -487,9 +491,11 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     E_r = pybamm.Parameter(
         "Positive electrode exchange-current density activation energy [J.mol-1]"
     )
+    alpha = pybamm.Parameter("Positive electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Positive electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def electrolyte_diffusivity_Nyman2008(c_e, T):
@@ -870,6 +876,8 @@ def get_parameter_values():
         "": graphite_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Primary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
         "Primary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Primary: Negative electrode exchange-current density alpha": 0.5,
+        "Primary: Negative electrode exchange-current density beta": 0.5,
         "Primary: Negative electrode density [kg.m-3]": 1657.0,
         "Negative electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Negative electrode thermal conductivity [W.m-1.K-1]": 1.7,
@@ -890,6 +898,8 @@ def get_parameter_values():
         "": silicon_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Secondary: Negative electrode kinetic rate constant [A.m-2]": 6.48e-7 * 28700 / 278000,
         "Secondary: Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
+        "Secondary: Negative electrode exchange-current density alpha": 0.5,
+        "Secondary: Negative electrode exchange-current density beta": 0.5,
         "Secondary: Negative electrode density [kg.m-3]": 2650.0,
         "Secondary: Negative electrode OCP entropic change [V.K-1]": 0.0,
         #cracking
@@ -990,6 +1000,8 @@ def get_parameter_values():
         "": nmc_LGM50_electrolyte_exchange_current_density_Chen2020,
         "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
         "Positive electrode exchange-current density activation energy [J.mol-1]": 17800.0,
+        "Positive electrode exchange-current density alpha": 0.5,
+        "Positive electrode exchange-current density beta": 0.5,
         "Positive electrode density [kg.m-3]": 3262.0,
         "Positive electrode specific heat capacity [J.kg-1.K-1]": 700.0,
         "Positive electrode thermal conductivity [W.m-1.K-1]": 2.1,
