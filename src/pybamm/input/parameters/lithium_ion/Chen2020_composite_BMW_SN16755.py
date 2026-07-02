@@ -16,7 +16,7 @@ Generate it with:
 from pathlib import Path
 
 import pybamm
-from pybamm.input.parameters.lithium_ion.Chen2020_composite import (
+from pybamm.input.parameters.lithium_ion.Chen2020_composite_mod import (
     get_parameter_values as _base_get_parameter_values,
     nmc_LGM50_ocp_Chen2020,
 )
