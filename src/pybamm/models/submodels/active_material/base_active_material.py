@@ -100,7 +100,13 @@ class BaseModel(pybamm.BaseSubModel):
 
             # Compute dimensional particle shape
             if self.options["particle shape"] == "spherical":
-                a = 3 * eps_solid / R
+                # Floor eps_solid here (rather than only via the LAM rate) so that
+                # `a` stays strictly positive even if a solver step transiently
+                # overshoots past the LAM floor in loss_active_material.py. `a` is
+                # used as a divisor when splitting current between phases, so a
+                # zero/negative value there is singular.
+                eps_solid_floor = 1e-8
+                a = 3 * pybamm.maximum(eps_solid, eps_solid_floor) / R
                 a_av = pybamm.x_average(a)
 
             a.print_name = f"a_{domain[0]}"

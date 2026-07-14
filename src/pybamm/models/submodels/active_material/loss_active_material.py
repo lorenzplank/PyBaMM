@@ -168,6 +168,24 @@ class LossActiveMaterial(BaseModel):
                 }
             )
 
+        # Stop active material loss once the phase is (numerically) exhausted.
+        # Physically this represents a phase becoming fully consumed/electrically
+        # isolated (e.g. a secondary silicon phase in a graphite-silicon composite)
+        # while the electrode remains usable via the other phase. Without this floor
+        # eps_solid can run through zero, and the surface area to volume ratio
+        # a = 3 * eps_solid / R (used as a divisor when splitting current between
+        # phases) becomes zero or negative, which is singular.
+        if self.x_average is True:
+            eps_solid_now = variables[
+                f"X-averaged {domain} electrode {phase_name}active material volume fraction"
+            ]
+        else:
+            eps_solid_now = variables[
+                f"{Domain} electrode {phase_name}active material volume fraction"
+            ]
+        eps_solid_floor = 1e-8
+        deps_solid_dt = deps_solid_dt * (eps_solid_now > eps_solid_floor)
+
         variables.update(
             self._get_standard_active_material_change_variables(deps_solid_dt)
         )
