@@ -135,6 +135,7 @@ Chen2020 = "pybamm.input.parameters.lithium_ion.Chen2020:get_parameter_values"
 Chen2020_mod = "pybamm.input.parameters.lithium_ion.Chen2020_mod:get_parameter_values"
 Chen2020_composite = "pybamm.input.parameters.lithium_ion.Chen2020_composite:get_parameter_values"
 Chen2020_composite_mod = "pybamm.input.parameters.lithium_ion.Chen2020_composite_mod:get_parameter_values"
+Chen2020_combined = "pybamm.input.parameters.lithium_ion.Chen2020_combined:get_parameter_values"
 Ecker2015 = "pybamm.input.parameters.lithium_ion.Ecker2015:get_parameter_values"
 Ecker2015_graphite_halfcell = "pybamm.input.parameters.lithium_ion.Ecker2015_graphite_halfcell:get_parameter_values"
 Marquis2019 = "pybamm.input.parameters.lithium_ion.Marquis2019:get_parameter_values"
@@ -150,6 +151,7 @@ ECM_Example = "pybamm.input.parameters.ecm.example_set:get_parameter_values"
 MSMR_Example = "pybamm.input.parameters.lithium_ion.MSMR_example_set:get_parameter_values"
 Chayambuka2022 = "pybamm.input.parameters.sodium_ion.Chayambuka2022:get_parameter_values"
 Chen2020_bimodal_nmc = "pybamm.input.parameters.lithium_ion.Chen2020_bimodal_nmc:get_parameter_values"
+Chen2020_composite_BMW_SN16755 = "pybamm.input.parameters.lithium_ion.Chen2020_composite_BMW_SN16755:get_parameter_values"
 
 [tool.hatch]
 version.source = "vcs"
@@ -275,3 +277,10 @@ module = [
         "pybamm.models.full_battery_models.base_battery_model.*"
         ]
 disable_error_code = "attr-defined"
+
+[dependency-groups]
+dev = [
+    "pytest-mock>=3.15.1",
+    "pytest-subtests>=0.15.0",
+    "pytest-xdist>=3.8.0",
+]

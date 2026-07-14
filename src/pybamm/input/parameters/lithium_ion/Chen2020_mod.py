@@ -365,9 +365,11 @@ def graphite_LGM50_electrolyte_exchange_current_density_Chen2020(
     """
     m_ref = pybamm.Parameter("Negative electrode kinetic rate constant [A.m-2]")
     E_r = pybamm.Parameter("Negative electrode exchange-current density activation energy [J.mol-1]")
+    alpha = pybamm.Parameter("Negative electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Negative electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def nmc_LGM50_ocp_Chen2020(sto):
@@ -434,9 +436,11 @@ def nmc_LGM50_electrolyte_exchange_current_density_Chen2020(c_e, c_s_surf, c_s_m
     """
     m_ref = pybamm.Parameter("Positive electrode kinetic rate constant [A.m-2]")
     E_r = pybamm.Parameter("Positive electrode exchange-current density activation energy [J.mol-1]")
+    alpha = pybamm.Parameter("Positive electrode exchange-current density alpha")
+    beta = pybamm.Parameter("Positive electrode exchange-current density beta")
     arrhenius = np.exp(E_r / pybamm.constants.R * (1 / 298.15 - 1 / T))
 
-    return m_ref * arrhenius * c_e**0.5 * c_s_surf**0.5 * (c_s_max - c_s_surf) ** 0.5
+    return m_ref * arrhenius * c_e**0.5 * c_s_surf**alpha * (c_s_max - c_s_surf) ** beta
 
 
 def electrolyte_diffusivity_Nyman2008(c_e, T):
@@ -536,8 +540,12 @@ def get_parameter_values():
         #Exchangecurrent densities form Okane2020
         "Negative electrode exchange-current density activation energy [J.mol-1]": 35000.0,
         "Negative electrode kinetic rate constant [A.m-2]": 6.48e-7,
+        "Negative electrode exchange-current density alpha": 0.5,
+        "Negative electrode exchange-current density beta": 0.5,
         "Positive electrode exchange-current density activation energy [J.mol-1]": 17800,
         "Positive electrode kinetic rate constant [A.m-2]": 3.42e-6,
+        "Positive electrode exchange-current density alpha": 0.5,
+        "Positive electrode exchange-current density beta": 0.5,
         #lithium plating
         "Lithium plating potential sharpness": 100,
         "Lithium metal partial molar volume [m3.mol-1]": 1.3e-05,
