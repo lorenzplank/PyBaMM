@@ -25,7 +25,7 @@ _data_path = str(Path(__file__).parent / "data")
 
 # Loaded at import time — CSV must exist before first import of this module.
 _delta_data = pybamm.parameters.process_1D_data(
-    "cathode_ocp_delta_sn16755_25dgc.csv", path=_data_path
+    "cathode_ocp_delta_sn16755_25dgc_v2.csv", path=_data_path
 )
 
 
